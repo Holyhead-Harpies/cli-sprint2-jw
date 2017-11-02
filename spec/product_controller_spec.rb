@@ -5,9 +5,6 @@ describe 'ProductController' do
     @product = ProductController.new('Yo', 'This is great', '25.99','5')
   end
   context 'is initialized,' do
-    it 'has four arguments' do
-    expect(@product.create_new_product).to have_attributes(Hash)
-    end
     it 'has the same title as what was passed' do
       expect(@product.get_title('Yo')).to eq('Yo')
     end
@@ -20,5 +17,10 @@ describe 'ProductController' do
     it 'has the same quantity as what was passed' do
       expect(@product.get_quantity('5')).to eq('5')
     end
+    it 'has the correct customerid' do
+      @product.add_customer_id(1)
+      expect(@product.product_hash[:customer_id]).to eq(1)
+    end
   end
 end
+
