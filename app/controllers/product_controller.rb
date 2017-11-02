@@ -13,29 +13,27 @@ class ProductController
   end
 
 
-
-
   def add_customer_id(customerId)
     @product_hash[:customer_id] = customerId
   end
 
   def get_title(title)
-    @title = title
+    @title = title.to_s
     @product_hash[:title] = @title
   end
 
   def get_description(description)
-    @description = description
+    @description = description.to_s
     @product_hash[:description] = @description
   end
 
   def get_price(price)
-    @price = price
+    @price = price.to_s
     @product_hash[:price] = @price
   end
 
   def get_quantity(quantity)
-    @quantity = quantity
+    @quantity = quantity.to_s
     @product_hash[:quantity] = @quantity
   end
 

@@ -22,5 +22,19 @@ describe 'ProductController' do
       expect(@product.product_hash[:customer_id]).to eq(1)
     end
   end
+  context 'is passed integer' do
+    it '.get_title should return a string' do
+      expect(@product.get_title(5)).to eq('5')
+    end
+    it '.get_description should return a string' do
+      expect(@product.get_description(72348234)).to eq('72348234')
+    end
+    it '.get_price should return a string' do
+      expect(@product.get_price(83434.9349)).to eq('83434.9349')
+    end
+    it '.get_quantity should return a string' do
+      expect(@product.get_quantity(7676)).to eq('7676')
+    end
+  end
 end
 
