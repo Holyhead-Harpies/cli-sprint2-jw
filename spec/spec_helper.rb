@@ -16,7 +16,7 @@
 require_relative '../app/models/customer_model'
 require_relative '../app/models/product_model'
 require_relative '../app/controllers/product_controller'
-requier
+
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
