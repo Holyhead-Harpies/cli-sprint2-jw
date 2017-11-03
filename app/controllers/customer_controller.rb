@@ -103,12 +103,12 @@ class CustomerController
 
 	def select_customer(customers)
 		puts "Which Customer Will Be Active?"
-		customerid = STDIN.gets.chomp
+		customerid = STDIN.gets.chomp.to_i
 		set_customer(customerid,customers)
 	end
 
 	def set_customer(cid,customers)
-		if cid =~ /[^1-9]/ || cid < 1 || cid > customers.length
+		if cid =~ /[^1-9]+/ || cid < 1 || cid > customers.length
 			puts 'Customer Does Not Exist'
 			'Customer Does Not Exist'
 		else
