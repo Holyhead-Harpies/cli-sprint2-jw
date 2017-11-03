@@ -21,6 +21,9 @@ describe 'ProductController' do
       @product.add_customer_id(1)
       expect(@product.product_hash[:customer_id]).to eq(1)
     end
+    it 'should raise an error without arguments' do
+      expect{ProductController.new}.to raise_error(ArgumentError)
+    end
   end
   context 'is passed integer' do
     it '.get_title should return a string' do
