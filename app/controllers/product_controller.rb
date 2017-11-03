@@ -5,16 +5,10 @@ require_relative '../models/product_model'
 #               customer_id, title, description, price, quantity
 ##
 class ProductController
-  attr_accessor :title, :description, :price, :quantity, :product_hash, :product_model
+  attr_accessor :product_hash
 
-  def initialize(customer_id, title, description, price, quantity)
-    @customer_id = customer_id
-    @title = title
-    @description = description
-    @price = price
-    @quantity = quantity
-    @product_hash = Hash.new
-
+  def initialize(product_hash = Hash.new)
+    @product_hash = product_hash
   end
 
   ## @brief      Adds customer_id to product_hash
@@ -25,8 +19,7 @@ class ProductController
   ##
 
   def add_customer_id(customerId)
-    @customer_id = customerId
-    @product_hash[:customer_id] = @customer_id
+    @product_hash[:customer_id] = customerId
   end
 
   ## @brief      Adds title to product_hash
@@ -37,8 +30,7 @@ class ProductController
   ##
 
   def get_title(title)
-    @title = title.to_s
-    @product_hash[:title] = @title
+    @product_hash[:title] = title.to_s
   end
 
   ## @brief      Adds description to product_hash
@@ -49,8 +41,7 @@ class ProductController
   ##
 
   def get_description(description)
-    @description = description.to_s
-    @product_hash[:description] = @description
+    @product_hash[:description] = description.to_s
   end
 
   ## @brief      Adds price to product_hash
@@ -61,8 +52,7 @@ class ProductController
   ##
 
   def get_price(price)
-    @price = price.to_s
-    @product_hash[:price] = @price
+    @product_hash[:price] = price.to_s
   end
 
   ## @brief      Adds quantity to product_hash
@@ -73,8 +63,7 @@ class ProductController
   ##
 
   def get_quantity(quantity)
-    @quantity = quantity.to_s
-    @product_hash[:quantity] = @quantity
+    @product_hash[:quantity] = quantity.to_s
   end
 
   ## @brief      Captures users input and calls other Procuct Controller method

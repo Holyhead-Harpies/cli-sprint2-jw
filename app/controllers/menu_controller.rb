@@ -1,5 +1,6 @@
 require_relative './customer_controller.rb'
 require_relative './payment_types_controller.rb'
+require_relative './product_controller.rb'
 
 class MainMenuController 
 
@@ -14,7 +15,7 @@ class MainMenuController
     end
 
     def display_main_menu(message)
-        system "clear"
+        # system "clear"
         puts message
         puts "*********************************************************"
         puts "**  Welcome to Bangazon! Command Line Ordering System  **"
@@ -36,11 +37,14 @@ class MainMenuController
         option = get_user_input
         case option
         when '1'
-            @active_customer = CustomerController.new.create_customer
+            @active_customer = CustomerController.new.create_new_customer
+            message = "Customer add successully."
+            display_main_menu(message)
         when '2'
             @active_customer = CustomerController.new.show_all_customers
+            message = "Successfully activated customer."
+            display_main_menu(message)
         when '3'
-            @active_customer = 123
             if @active_customer
                 PaymentTypeController.new.ask_for_payment_type_info(@active_customer)
                 message = "Payment Type added successfully."
@@ -50,6 +54,14 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '4'
+            if @active_customer
+                ProductController.new.create_product(@active_customer)
+                message = "Product added successfully."
+                display_main_menu(message)
+            else 
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
         when '5'
         when '6'
         when '7'

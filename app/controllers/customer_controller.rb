@@ -50,6 +50,10 @@ class CustomerController
 		zip = STDIN.gets.chomp
 		get_zip(zip)
 
+		puts "Enter the customer's phone number"
+		phone = STDIN.gets.chomp
+		get_phone(phone)
+
 		@CustomerModel.add_customer(@customer_hash)
 	end
 ## @brief      adds customer name to the customer_hash
@@ -99,12 +103,12 @@ class CustomerController
 
 	def select_customer(customers)
 		puts "Which Customer Will Be Active?"
-		customerid = STDIN.gets.chomp
+		customerid = STDIN.gets.chomp.to_i
 		set_customer(customerid,customers)
 	end
 
 	def set_customer(cid,customers)
-		if cid =~ /[^1-9]/ || cid < 1 || cid > customers.length
+		if cid =~ /[^1-9]+/ || cid < 1 || cid > customers.length
 			puts 'Customer Does Not Exist'
 			'Customer Does Not Exist'
 		else

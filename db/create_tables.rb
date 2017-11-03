@@ -1,6 +1,6 @@
 require 'sqlite3'
 
-db = SQLite3::Database.new('sprint2.sqlite')
+db = SQLite3::Database.new('./db/sprint2.sqlite')
 begin
     db.transaction
     db.execute("CREATE TABLE `Customers` (
