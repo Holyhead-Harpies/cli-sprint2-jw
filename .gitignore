@@ -1,2 +1,6 @@
 db/sprint2.sqlite
 .rspec
+.idea
+db/test.sqlite
+.rspec
+
