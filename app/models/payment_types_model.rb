@@ -6,7 +6,7 @@ require 'date'
 class PaymentTypeModel
 
     def initialize
-        @db = SQLite3::Database.open('sprint2.sqlite')
+        @db = SQLite3::Database.open('./db/sprint2.sqlite')
     end
 
     ##

@@ -50,6 +50,10 @@ class CustomerController
 		zip = STDIN.gets.chomp
 		get_zip(zip)
 
+		puts "Enter the customer's phone number"
+		phone = STDIN.gets.chomp
+		get_phone(phone)
+
 		@CustomerModel.add_customer(@customer_hash)
 	end
 ## @brief      adds customer name to the customer_hash
