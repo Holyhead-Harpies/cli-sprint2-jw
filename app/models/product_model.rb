@@ -36,6 +36,10 @@ class ProductModel
     end
   end
 
+  ## @brief      queries database for all Products data in the Products table
+  ## @param      none
+  ## @return     returns all values for Products
+
   def show_all_products
     products = @db.execute "SELECT * FROM Products"
     @db.close
