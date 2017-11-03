@@ -16,16 +16,42 @@ describe ProductModel do
     }
     @product_model = ProductModel.new('./db/sprint2.sqlite')
   end
-  it 'should raise an error without arguments' do
-    @product_model.create_new_product(@product_hash)
-    expect{@product_model.create_new_product}.to raise_error(ArgumentError)
+  context 'Creating a new product...' do
+
+    it 'should raise an error without arguments' do
+      @product_model.create_new_product(@product_hash)
+      expect{@product_model.create_new_product}.to raise_error(ArgumentError)
+    end
+
   end
 
-  it 'should contain the method show_all_products' do
-    expect(@product_model).to respond_to(:show_all_products)
+  context 'Showing all the products...' do
+    it 'should contain the method show_all_products' do
+      expect(@product_model).to respond_to(:show_all_products)
+    end
+
+    it 'should return an array' do
+      expect(@product_model.show_all_products).to be_a(Array)
+    end
   end
 
-  it 'should return a hash' do
-    expect(@product_model.show_all_products).to be_a(Array)
+  context 'Returning one product' do
+
+    it 'should contain a method to show one product' do
+      expect(@product_model).to respond_to(:show_one_product)
+    end
+
+    it 'should raise an argument error if it does not have an argument' do
+      expect{@product_model.show_one_product}.to raise_error(ArgumentError)
+    end
+
+    it 'should return an array with one item' do
+      expect(@product_model.show_one_product(1)).to be_a(Array)
+    end
+
+    it 'should return the data that was requested' do
+      expect(@product_model.show_one_product(1)[0][0]).to eq(1)
+    end
+
   end
 end

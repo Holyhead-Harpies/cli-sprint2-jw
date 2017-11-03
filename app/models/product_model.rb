@@ -45,4 +45,17 @@ class ProductModel
     @db.close
     products
   end
+
+  def show_one_product(product_id)
+    statement = "SELECT * FROM Products WHERE ProductID = #{product_id}"
+    product = @db.execute statement
+    @db.close
+    product
+  end
+
 end
+
+
+# db.execute "SELECT * FROM artist WHERE name = :artist_named_jisie AND artistId = :an_id", artist_named_jisie, an_id
+
+
