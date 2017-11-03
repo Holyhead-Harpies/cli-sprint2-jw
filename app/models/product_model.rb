@@ -4,11 +4,10 @@ require 'sqlite3'
 ##
 ## @brief      Class for Product model.
 ##
-class Product
+class ProductModel
 
   def initialize(database = './db/sprint2.sqlite')
     @db = SQLite3::Database.open(database)
-    @db.results_as_hash = true
   end
 
   ## @brief      creates a new product from the controller hash and passes it to the database
@@ -40,6 +39,6 @@ class Product
   def show_all_products
     products = @db.execute "SELECT * FROM Products"
     @db.close
-    products[0]
+    products
   end
 end

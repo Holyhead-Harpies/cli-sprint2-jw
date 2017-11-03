@@ -1,7 +1,7 @@
 require_relative '../app/models/product_model'
 require 'date'
 
-describe Product do
+describe ProductModel do
   before(:each) do
     d = DateTime.now
     date = "#{d.month}/#{d.day}/#{d.year}"
@@ -14,7 +14,7 @@ describe Product do
       created_at: date,
       updated_at: date
     }
-    @product_model = Product.new('./db/test.sqlite')
+    @product_model = ProductModel.new('./db/sprint2.sqlite')
   end
   it 'should raise an error without arguments' do
     @product_model.create_new_product(@product_hash)
@@ -26,6 +26,6 @@ describe Product do
   end
 
   it 'should return a hash' do
-    expect(@product_model.show_all_products).to be_a(Hash)
+    expect(@product_model.show_all_products).to be_a(Array)
   end
 end
