@@ -1,8 +1,8 @@
 require_relative '../models/product_model'
 
 ##
-## @brief      Class for Prodcut Controller. Initalized with a
-#               customer_id, title, description, price, quantity
+## @brief      Class for Product Controller. Initalized with a
+#               new Hash
 ##
 class ProductController
   attr_accessor :product_hash
@@ -88,6 +88,19 @@ class ProductController
     quantity = STDIN.gets.chomp
     get_quantity(quantity)
     Product.new.create_new_product(@product_hash)
+  end
+
+  def show_products
+    products = Product.new.show_products(customerId)
+    products.each_with_index {|val, index|}
+    puts "#{index}. #{val}"
+  end
+
+  def remove_product(customerId)
+    puts 'Select a product: '
+    show_products
+    product_id = STDIN.gets.chomp
+    Product.new.remove_product(product_id)
   end
 end
 

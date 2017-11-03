@@ -25,8 +25,6 @@ class Product
     hash_from_controller[:created_at] = date
     hash_from_controller[:updated_at] = date
     begin
-      p @db
-      p hash_from_controller
       statement = "INSERT INTO Products(OwnerId, Title, Description, Price, Quantity, created_at, updated_at) VALUES( '#{hash_from_controller[:customer_id]}',
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
@@ -40,6 +38,33 @@ class Product
       @db.rollback
     ensure
       @db.close
+    end
+  end
+
+  def get_products(customerId)
+    begin
+      products = "SELECT Products.title where Products.OwnerId == #{customerId}"
+      @db.transaction
+      @db.execute products
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.show_products'
+      puts e
+      @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  def remove_product(productId)
+    begin
+      statement = "DELETE FROM Prodcuts WHERE productId = Products.productId"
+      db.transaction
+      db.execute statement
+    rescue SQLite::Exception => e
+      puts 'Exception occurred from ProductModel.remove_product'
+      puts e
+    ensure
+      db.close
     end
   end
 end

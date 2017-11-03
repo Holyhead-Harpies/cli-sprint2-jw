@@ -65,6 +65,14 @@ class MainMenuController
         when '5'
         when '6'
         when '7'
+            if @active_customer
+                ProductController.new.remove_product(@active_customer)
+                message = 'Product removed successfully.'
+                display_main_menu(message)
+            else
+              message = 'Must set an active customer'
+              display_main_menu(message)
+            end
         when '8'
         when '9'
         when '10'
