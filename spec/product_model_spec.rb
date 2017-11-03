@@ -4,7 +4,7 @@ require 'date'
 
 describe Product do
   before(:each) do
-    d = Datetime.now
+    d = DateTime.now
     date = "#{d.month}/#{d.day}/#{d.year}"
     @product_hash = {
       title: 'Widget',

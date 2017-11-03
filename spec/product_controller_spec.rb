@@ -2,7 +2,7 @@ require_relative '../app/controllers/product_controller'
 
 describe 'ProductController' do
   before(:each) do
-    @product = ProductController.new('Yo', 'This is great', '25.99','5')
+    @product = ProductController.new(54,'Yo', 'This is great', '25.99','5')
   end
   context 'is initialized,' do
     it 'has the same title as what was passed' do
