@@ -1,4 +1,5 @@
 require 'sqlite3'
+
 ##
 ## @brief      Class for Customer Model.
 ##
@@ -29,5 +30,9 @@ class CustomerModel
 		ensure
 			@db.close
 		end
+	end
+
+	def get_all_customers
+		stm = @db.execute "select * from Customers"
 	end
 end
