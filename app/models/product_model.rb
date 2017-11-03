@@ -38,13 +38,19 @@ class Product
       @db.rollback
     ensure
       @db.close
-    end
+      end
   end
+
+  ## @brief      gets products based on customerId
+  ##
+  ## @param      customerId
+  ##
+  ## @return     returns customers products
+  ##
 
   def get_products(customerId)
     begin
-      products = "SELECT Products.title where Products.OwnerId == #{customerId}"
-      @db.transaction
+      products = "SELECT Products.title, Products.ProductId from Products where Products.OwnerId == #{customerId.to_i}"
       @db.execute products
     rescue SQLite3::Exception => e
       puts 'Exception occurred from ProductModel.show_products'
@@ -55,16 +61,22 @@ class Product
     end
   end
 
+  ## @brief      gets products based on customerId
+  ##
+  ## @param      customerId
+  ##
+  ## @return     returns customers products
+  ##
+
   def remove_product(productId)
     begin
-      statement = "DELETE FROM Prodcuts WHERE productId = Products.productId"
-      db.transaction
-      db.execute statement
-    rescue SQLite::Exception => e
+      statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+      @db.execute statement
+    rescue SQLite3::Exception => e
       puts 'Exception occurred from ProductModel.remove_product'
       puts e
     ensure
-      db.close
+      @db.close
     end
   end
 end
