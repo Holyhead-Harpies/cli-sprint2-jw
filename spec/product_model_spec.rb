@@ -14,9 +14,13 @@ describe Product do
       created_at: date,
       updated_at: date
     }
-    @product_model = Product.new
+    @product_model = Product.new('./db/test.sqlite')
   end
   it 'should raise an error without arguments' do
     expect{@product_model.create_new_product}.to raise_error(ArgumentError)
+  end
+
+  it 'should contain the method show_all_products' do
+    expect(@product_model).to respond_to(:show_all_products)
   end
 end

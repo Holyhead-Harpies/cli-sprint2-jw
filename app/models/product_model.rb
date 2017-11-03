@@ -6,18 +6,14 @@ require 'sqlite3'
 ##
 class Product
 
-  def initialize
-    @db = SQLite3::Database.open('./db/sprint2.sqlite')
+  def initialize(database = './db/sprint2.sqlite')
+    @db = SQLite3::Database.open(database)
     @db.results_as_hash = true
   end
 
-
   ## @brief      creates a new product from the controller hash and passes it to the database
-  ##
   ## @param      hash_from_controller
-  ##
   ## @return     returns nothing
-  ##
 
   def create_new_product(hash_from_controller)
     d = DateTime.now
@@ -41,5 +37,9 @@ class Product
     ensure
       @db.close
     end
+  end
+
+  def show_all_products
+    
   end
 end
