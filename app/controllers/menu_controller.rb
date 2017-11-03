@@ -36,7 +36,7 @@ class MainMenuController
         option = get_user_input
         case option
         when '1'
-            @active_customer = CustomerController.new.create_customer
+            @active_customer = CustomerController.new.create_new_customer
         when '2'
             @active_customer = CustomerController.new.show_all_customers
         when '3'
