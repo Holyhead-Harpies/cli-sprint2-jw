@@ -10,6 +10,10 @@ class ProductModel
     @database = database
   end
 
+  ## @brief      opens a connection to the database specified when class is initialized
+  ## @param      none
+  ## @return     returns connection to database
+
   def open_db_connection
     SQLite3::Database.open(@database)
   end
@@ -46,6 +50,7 @@ class ProductModel
 
   def show_all_products
     @db = open_db_connection
+    @db.results_as_hash
     @db.transaction
     products = @db.execute "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products"
     @db.commit
@@ -59,6 +64,7 @@ class ProductModel
 
   def show_one_product(product_id)
     @db = open_db_connection
+    @db.results_as_hash
     statement = "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products WHERE ProductID = #{product_id}"
     @db.transaction
     product = @db.execute statement

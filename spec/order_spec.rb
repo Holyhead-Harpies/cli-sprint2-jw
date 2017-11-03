@@ -22,4 +22,16 @@ describe OrderController do
 		expect(@order_controller).to respond_to(:select_product).with(1).arguments
 	end
 
+	it 'returns the product that was selected' do
+		expect(@order_controller.select_product(3)[0][0]).to eq(3)
+	end
+
+	it 'has a function to remove a product from the displayed list' do
+		expect(@order_controller).to respond_to(:remove_product_from_list).with(2).arguments
+	end
+
+	it 'removes the specified array from the products list' do
+		
+	end
+
 end
