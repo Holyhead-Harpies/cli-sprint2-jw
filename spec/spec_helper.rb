@@ -13,7 +13,10 @@
 # it.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require_relative '../app/controllers/customer_controller'
 require_relative '../app/models/customer_model'
+require_relative '../app/controllers/order_controller'
+require_relative '../app/models/order_model'
 require_relative '../app/models/product_model'
 require_relative '../app/controllers/product_controller'
 require_relative '../app/controllers/payment_types_controller'
