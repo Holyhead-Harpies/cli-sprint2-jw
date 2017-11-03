@@ -21,8 +21,6 @@ class Product
     hash_from_controller[:created_at] = date
     hash_from_controller[:updated_at] = date
     begin
-      p @db
-      p hash_from_controller
       statement = "INSERT INTO Products(OwnerId, Title, Description, Price, Quantity, created_at, updated_at) VALUES( '#{hash_from_controller[:customer_id]}',
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
@@ -40,6 +38,8 @@ class Product
   end
 
   def show_all_products
-    
+    products = @db.execute "SELECT * FROM Products"
+    @db.close
+    products[0]
   end
 end
