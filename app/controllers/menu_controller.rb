@@ -38,6 +38,7 @@ class MainMenuController
         when '1'
             @active_customer = CustomerController.new.create_customer
         when '2'
+            @active_customer = CustomerController.new.show_all_customers
         when '3'
             @active_customer = 123
             if @active_customer
