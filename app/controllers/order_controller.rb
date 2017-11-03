@@ -25,6 +25,7 @@ class OrderController
 	end
 
 	def select_product(product_id)
-
+		product =  @products_model.show_one_product(product_id)
+		puts product.to_table
 	end
 end

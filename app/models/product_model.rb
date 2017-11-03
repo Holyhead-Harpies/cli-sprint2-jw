@@ -6,8 +6,12 @@ require 'sqlite3'
 ##
 class ProductModel
 
-  def initialize(database = './db/sprint2.sqlite')
-    @db = SQLite3::Database.open(database)
+  def initialize(database = './db/test.sqlite')
+    @database = database
+  end
+
+  def open_db_connection
+    SQLite3::Database.open(@database)
   end
 
   ## @brief      creates a new product from the controller hash and passes it to the database
@@ -41,21 +45,25 @@ class ProductModel
   ## @return     returns all values for Products
 
   def show_all_products
-    products = @db.execute "SELECT * FROM Products"
+    @db = open_db_connection
+    @db.transaction
+    products = @db.execute "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products"
+    @db.commit
     @db.close
     products
   end
 
+  ## @brief      queries database for one product
+  ## @param      product id
+  ## @return     returns specified row from Products
+
   def show_one_product(product_id)
-    statement = "SELECT * FROM Products WHERE ProductID = #{product_id}"
+    @db = open_db_connection
+    statement = "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products WHERE ProductID = #{product_id}"
+    @db.transaction
     product = @db.execute statement
     @db.close
     product
   end
 
 end
-
-
-# db.execute "SELECT * FROM artist WHERE name = :artist_named_jisie AND artistId = :an_id", artist_named_jisie, an_id
-
-
