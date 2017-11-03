@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe Customer do
+describe CustomerModel do
 	
 end
