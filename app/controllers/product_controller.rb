@@ -100,8 +100,9 @@ class ProductController
   def show_products(customerId)
     products = Product.new.get_products(customerId)
     products.each_with_index  do |p, i|
-      puts "#{p['ProductId']}. #{p[0]}"
+      p "#{i+1}. #{p[i]}"
     end
+    products
   end
 
   ## @brief      Remove products from model and prints to the console
@@ -113,8 +114,11 @@ class ProductController
 
   def remove_product(customerId)
     puts 'Select a product: '
-    show_products(customerId)
-    product_id = STDIN.gets.chomp
+    products = show_products(customerId)
+    user_input = STDIN.gets.chomp.to_i
+    product_id = products[user_input-1]['ProductId']
+
+
     Product.new.remove_product(product_id.to_i)
     return true
   end
