@@ -100,7 +100,7 @@ class ProductController
   def show_products(customerId)
     products = Product.new.get_products(customerId)
     products.each_with_index  do |p, i|
-      p "#{i+1}. #{p[i]}"
+      p "#{i+1}. #{p['Title']}"
     end
     products
   end
@@ -116,11 +116,16 @@ class ProductController
     puts 'Select a product: '
     products = show_products(customerId)
     user_input = STDIN.gets.chomp.to_i
-    product_id = products[user_input-1]['ProductId']
+    if user_input.is_a?(Integer) && user_input.to_i <= products.length
+      product_id = products[user_input-1]['ProductId']
 
 
-    Product.new.remove_product(product_id.to_i)
-    return true
+      Product.new.remove_product(product_id.to_i)
+      return true
+    else
+      p "Not an option!"
+      return
+    end
   end
 
 
@@ -188,6 +193,7 @@ class ProductController
 
       Product.new.update_product(customerId,product_id,field_change,value_change)
     else
+      p "Not an option!"
       return
     end
 
