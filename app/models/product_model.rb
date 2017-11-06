@@ -79,10 +79,7 @@ class Product
       @db.close
     end
   end
-
-  def add_to_cart_or_create_order(productId)
-    begin
-      statement = "INSERT Into Orders WHERE Products.ProductId = #{productId}"
-    end
-  end
 end
+
+
+

@@ -119,10 +119,6 @@ class ProductController
   end
 end
 
-def add_product_to_cart(customerId)
-  showproducts(customerId)
-  product_id = STDIN.gets.chomp
-  Product.add_to_cart_or_create_order(product_id.to_i)
-end
+
 
 
