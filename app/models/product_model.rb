@@ -85,7 +85,6 @@ class Product
       @db.close
     end
   end
-<<<<<<< HEAD
 
   def get_product_price_info(product_id)
     begin 
@@ -99,9 +98,6 @@ class Product
       
     end
   end
-end
-=======
->>>>>>> master
 
   ##
   ## @brief      gets a single product for specific customer
