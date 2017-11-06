@@ -25,8 +25,6 @@ class Product
     hash_from_controller[:created_at] = date
     hash_from_controller[:updated_at] = date
     begin
-      p @db
-      p hash_from_controller
       statement = "INSERT INTO Products(OwnerId, Title, Description, Price, Quantity, created_at, updated_at) VALUES( '#{hash_from_controller[:customer_id]}',
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
@@ -40,6 +38,19 @@ class Product
       @db.rollback
     ensure
       @db.close
+    end
+  end
+
+  def get_product_price_info(product_id)
+    begin 
+      return @db.execute("select p.ProductId, p.Title, p.Price from Products p where p.ProductId = #{product_id}")
+    rescue SQLite3::Exception => e
+      @db.rollback
+    else
+      
+    ensure
+      @db.close
+      
     end
   end
 end

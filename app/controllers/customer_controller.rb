@@ -18,7 +18,7 @@ class CustomerController
 	def initialize(customer_hash = Hash.new)
 		@CustomerModel = CustomerModel.new
 		d = DateTime.now
-		date = "#{d.month}/#{d.day}#{d.year}"
+		date = "#{d.month}/#{d.day}/#{d.year}"
 		@customer_hash = customer_hash
 		@customer_hash[:created_at] = date
 		@customer_hash[:updated_at] = date
