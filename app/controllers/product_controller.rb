@@ -70,7 +70,7 @@ class ProductController
   ##
   ## @param      customerId
   ##
-  ## @return    New Product model passing it the recently updated product_hash
+  ## @return     New Product model passing it the recently updated product_hash
   ##
 
   def create_product(customerId)
@@ -90,7 +90,7 @@ class ProductController
     Product.new.create_new_product(@product_hash)
   end
 
-  ## @brief      Gets produts from model and prints to the console
+## @brief      Gets produts from model and prints to the console
   ##
   ## @param      customerId
   ##
@@ -100,8 +100,9 @@ class ProductController
   def show_products(customerId)
     products = Product.new.get_products(customerId)
     products.each_with_index  do |p, i|
-      puts "#{p['ProductId']}. #{p[0]}"
+      p "#{i+1}. #{p[i]}"
     end
+    products
   end
 
   ## @brief      Remove products from model and prints to the console
@@ -113,14 +114,24 @@ class ProductController
 
   def remove_product(customerId)
     puts 'Select a product: '
-    show_products(customerId)
-    product_id = STDIN.gets.chomp
+    products = show_products(customerId)
+    user_input = STDIN.gets.chomp.to_i
+    product_id = products[user_input-1]['ProductId']
+
+
     Product.new.remove_product(product_id.to_i)
     return true
   end
-end
 
 
+  ##
+  ## @brief      Shows a single product of a customer to edit
+  ##
+  ## @param      customerId  The customer identifier
+  ## @param      productId   The product identifier
+  ##
+  ## @return     returns the single product
+  ##
   def show_product(customerId,productId)
     product = Product.new.get_product(customerId,productId)
     puts "1. Change Title '#{product[0][0]}'"
@@ -131,40 +142,55 @@ end
   end
 
 
+  ##
+  ## @brief      updates a single value of a product
+  ##
+  ## @param      customerId  The customer identifier
+  ##
+  ## @return     nothing
+  ##
   def update_product(customerId)
     puts 'Select a product: '
-    show_products(customerId)
+    products = show_products(customerId)
     product_id = STDIN.gets.chomp
-    show_product(customerId,product_id)
+    products.each_with_index  do |p, i|
+      if p['ProductId'].to_i == product_id.to_i
+        show_product(customerId,product_id)
 
-    field_change = STDIN.gets.chomp
-    case field_change
-    when '1'
-      field_change = 'Title'
+        field_change = STDIN.gets.chomp
+        case field_change
+        when '1'
+          field_change = 'Title'
 
-      puts "Enter new Title"
+          puts "Enter new Title"
 
-    when '2'
-      field_change = 'Description'
+        when '2'
+          field_change = 'Description'
 
-      puts "Enter new Description"
+          puts "Enter new Description"
 
-    when '3'
-      field_change = 'Price'
+        when '3'
+          field_change = 'Price'
 
-      puts "Enter new Price"
+          puts "Enter new Price"
 
-    when '4'
-      field_change = 'Quantity'
+        when '4'
+          field_change = 'Quantity'
 
-      puts "Enter new Quantity"
-    else
-      puts "Not a valid option!"
-      return
+          puts "Enter new Quantity"
+        else
+          puts "Not a valid option!"
+          return
+        end
+
+
+        value_change = STDIN.gets.chomp
+
+        Product.new.update_product(customerId,product_id,field_change,value_change)
+      end
+
     end
 
-    value_change = STDIN.gets.chomp
 
-    Product.new.update_product(customerId,product_id,field_change,value_change)
   end
 end

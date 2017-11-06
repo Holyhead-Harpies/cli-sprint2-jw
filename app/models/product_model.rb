@@ -71,7 +71,7 @@ class Product
   def remove_product(productId)
     begin
       truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
-      if truth == nil
+      if truth == []
         statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
         @db.execute statement
         puts 'Product removed successfully.'
@@ -86,6 +86,14 @@ class Product
     end
   end
 
+  ##
+  ## @brief      gets a single product for specific customer
+  ##
+  ## @param      customerId  The customer identifier
+  ## @param      productId   The product identifier
+  ##
+  ## @return     The product
+  ##
   def get_product(customerId,productId)
     begin
       products = "SELECT Products.title, Products.description, Products.price, Products.quantity from Products where Products.OwnerId = #{customerId} and Products.ProductId = #{productId}"
@@ -101,6 +109,16 @@ class Product
   end
 
 
+  ##
+  ## @brief      updates a single product
+  ##
+  ## @param      customerId    The customer identifier
+  ## @param      productId     The product identifier
+  ## @param      field_change  The field to change
+  ## @param      value_change  The value to change
+  ##
+  ## @return
+  ##
   def update_product(customerId,productId,field_change,value_change)
     begin
       statement = "UPDATE Products SET #{field_change} = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"

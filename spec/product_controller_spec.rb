@@ -1,4 +1,3 @@
-require 'spec_helper'
 require_relative '../app/controllers/product_controller'
 
 describe ProductController do
@@ -34,7 +33,7 @@ describe ProductController do
       expect(@product.get_price(83434.9349)).to eq('83434.9349')
     end
     it '.get_quantity should return a string' do
-      expect(@product.get_quantity(7676)).to eq('7676'R)
+      expect(@product.get_quantity(7676)).to eq('7676')
     end
     context '.remove_product is passed no arg' do
       it 'should raise an error without arguments' do
