@@ -1,3 +1,4 @@
+require 'text-table'
 require_relative '../models/product_model'
 
 ##
@@ -139,7 +140,7 @@ class ProductController
   ##
   def show_product(customerId,productId)
     product = Product.new.get_product(customerId,productId)
-    puts "1. Change Title '#{product[0][0]}'"
+    puts "1. Change Title '#{product[0][0]}'".to_table
     puts "2. Change Description '#{product[0][1]}'"
     puts "3. Change Price '#{product[0][2]}'"
     puts "4. Change Quantity '#{product[0][3]}'"
