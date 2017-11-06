@@ -25,8 +25,6 @@ class Product
     hash_from_controller[:created_at] = date
     hash_from_controller[:updated_at] = date
     begin
-      p @db
-      p hash_from_controller
       statement = "INSERT INTO Products(OwnerId, Title, Description, Price, Quantity, created_at, updated_at) VALUES( '#{hash_from_controller[:customer_id]}',
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
@@ -40,6 +38,54 @@ class Product
       @db.rollback
     ensure
       @db.close
+      end
+  end
+
+  ## @brief      gets products based on customerId
+  ##
+  ## @param      customerId
+  ##
+  ## @return     returns customers products
+  ##
+
+  def get_products(customerId)
+    begin
+      products = "SELECT Products.title, Products.ProductId from Products where Products.OwnerId == #{customerId.to_i}"
+      @db.execute products
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.show_products'
+      puts e
+      @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  ## @brief      removes product based on item not being in the cart/order
+  ##
+  ## @param      productId
+  ##
+  ## @return     message of error or confirmation
+  ##
+
+  def remove_product(productId)
+    begin
+      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      if truth == nil
+        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+        @db.execute statement
+        puts 'Product removed successfully.'
+      else
+        puts "That product is in an active order"
+      end
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.remove_product'
+      puts e
+    ensure
+      @db.close
     end
   end
 end
+
+
+
