@@ -71,7 +71,7 @@ class Product
   def remove_product(productId)
     begin
       truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
-      if truth == nil
+      if truth == []
         statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
         @db.execute statement
         puts 'Product removed successfully.'
