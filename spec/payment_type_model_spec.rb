@@ -20,7 +20,7 @@ describe PaymentTypeModel do
         it "fails with 0 arguments" do
             expect{@ptm.create_new_payment_type}.to raise_error(ArgumentError)
         end
-        
+
         it "fails with more than 1 argument" do
             expect{@ptm.create_new_payment_type("arg1", "arg2")}.to raise_error(ArgumentError)
         end

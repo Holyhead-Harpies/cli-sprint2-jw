@@ -70,7 +70,7 @@ class ProductController
   ##
   ## @param      customerId
   ##
-  ## @return    New Product model passing it the recently updated product_hash
+  ## @return     New Product model passing it the recently updated product_hash
   ##
 
   def create_product(customerId)
@@ -90,7 +90,7 @@ class ProductController
     Product.new.create_new_product(@product_hash)
   end
 
-  ## @brief      Gets produts from model and prints to the console
+## @brief      Gets produts from model and prints to the console
   ##
   ## @param      customerId
   ##
@@ -100,7 +100,7 @@ class ProductController
   def show_products(customerId)
     products = Product.new.get_products(customerId)
     products.each_with_index  do |p, i|
-      p "#{i+1}. #{p[i]}"
+      p "#{i+1}. #{p['Title']}"
     end
     products
   end
@@ -116,14 +116,88 @@ class ProductController
     puts 'Select a product: '
     products = show_products(customerId)
     user_input = STDIN.gets.chomp.to_i
-    product_id = products[user_input-1]['ProductId']
+    if user_input.is_a?(Integer) && user_input.to_i <= products.length
+      product_id = products[user_input-1]['ProductId']
 
 
-    Product.new.remove_product(product_id.to_i)
-    return true
+      Product.new.remove_product(product_id.to_i)
+      return true
+    else
+      p "Not an option!"
+      return
+    end
+  end
+
+
+  ##
+  ## @brief      Shows a single product of a customer to edit
+  ##
+  ## @param      customerId  The customer identifier
+  ## @param      productId   The product identifier
+  ##
+  ## @return     returns the single product
+  ##
+  def show_product(customerId,productId)
+    product = Product.new.get_product(customerId,productId)
+    puts "1. Change Title '#{product[0][0]}'"
+    puts "2. Change Description '#{product[0][1]}'"
+    puts "3. Change Price '#{product[0][2]}'"
+    puts "4. Change Quantity '#{product[0][3]}'"
+    return product
+  end
+
+
+  ##
+  ## @brief      updates a single value of a product
+  ##
+  ## @param      customerId  The customer identifier
+  ##
+  ## @return     nothing
+  ##
+  def update_product(customerId)
+    puts 'Select a product: '
+    products = show_products(customerId)
+    user_input = STDIN.gets.chomp.to_i
+    if user_input.is_a?(Integer) && user_input.to_i <= products.length
+      product_id = products[user_input-1]['ProductId']
+      show_product(customerId,product_id)
+
+      field_change = STDIN.gets.chomp
+      case field_change
+      when '1'
+        field_change = 'Title'
+
+        puts "Enter new Title"
+
+      when '2'
+        field_change = 'Description'
+
+        puts "Enter new Description"
+
+      when '3'
+        field_change = 'Price'
+
+        puts "Enter new Price"
+
+      when '4'
+        field_change = 'Quantity'
+
+        puts "Enter new Quantity"
+      else
+        puts "Not a valid option!"
+        return
+      end
+
+
+      value_change = STDIN.gets.chomp
+
+      Product.new.update_product(customerId,product_id,field_change,value_change)
+    else
+      p "Not an option!"
+      return
+    end
+
+
+
   end
 end
-
-
-
-
