@@ -116,6 +116,7 @@ class ProductController
     show_products(customerId)
     product_id = STDIN.gets.chomp
     Product.new.remove_product(product_id.to_i)
+    return true
   end
 end
 

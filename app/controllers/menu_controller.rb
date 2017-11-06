@@ -56,7 +56,6 @@ class MainMenuController
         when '4'
             if @active_customer
                 ProductController.new.create_product(@active_customer)
-                message = "Product added successfully."
                 display_main_menu(message)
             else 
                 message = "Must set an active customer."
@@ -67,7 +66,7 @@ class MainMenuController
         when '7'
             if @active_customer
                 ProductController.new.remove_product(@active_customer)
-                message = 'Product removed successfully.'
+                message = ''
                 display_main_menu(message)
             else
               message = 'Must set an active customer'

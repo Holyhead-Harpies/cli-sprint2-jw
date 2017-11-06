@@ -61,17 +61,23 @@ class Product
     end
   end
 
-  ## @brief      gets products based on customerId
+  ## @brief      removes product based on item not being in the cart/order
   ##
-  ## @param      customerId
+  ## @param      productId
   ##
-  ## @return     returns customers products
+  ## @return     message of error or confirmation
   ##
 
   def remove_product(productId)
     begin
-      statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
-      @db.execute statement
+      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      if truth == nil
+        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+        @db.execute statement
+        puts 'Product removed successfully.'
+      else
+        puts "That product is in an active order"
+      end
     rescue SQLite3::Exception => e
       puts 'Exception occurred from ProductModel.remove_product'
       puts e
