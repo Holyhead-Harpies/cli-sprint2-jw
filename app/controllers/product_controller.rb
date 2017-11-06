@@ -152,44 +152,45 @@ class ProductController
   def update_product(customerId)
     puts 'Select a product: '
     products = show_products(customerId)
-    product_id = STDIN.gets.chomp
-    products.each_with_index  do |p, i|
-      if p['ProductId'].to_i == product_id.to_i
-        show_product(customerId,product_id)
+    user_input = STDIN.gets.chomp.to_i
+    if user_input.is_a?(Integer) && user_input.to_i <= products.length
+      product_id = products[user_input-1]['ProductId']
+      show_product(customerId,product_id)
 
-        field_change = STDIN.gets.chomp
-        case field_change
-        when '1'
-          field_change = 'Title'
+      field_change = STDIN.gets.chomp
+      case field_change
+      when '1'
+        field_change = 'Title'
 
-          puts "Enter new Title"
+        puts "Enter new Title"
 
-        when '2'
-          field_change = 'Description'
+      when '2'
+        field_change = 'Description'
 
-          puts "Enter new Description"
+        puts "Enter new Description"
 
-        when '3'
-          field_change = 'Price'
+      when '3'
+        field_change = 'Price'
 
-          puts "Enter new Price"
+        puts "Enter new Price"
 
-        when '4'
-          field_change = 'Quantity'
+      when '4'
+        field_change = 'Quantity'
 
-          puts "Enter new Quantity"
-        else
-          puts "Not a valid option!"
-          return
-        end
-
-
-        value_change = STDIN.gets.chomp
-
-        Product.new.update_product(customerId,product_id,field_change,value_change)
+        puts "Enter new Quantity"
+      else
+        puts "Not a valid option!"
+        return
       end
 
+
+      value_change = STDIN.gets.chomp
+
+      Product.new.update_product(customerId,product_id,field_change,value_change)
+    else
+      return
     end
+
 
 
   end
