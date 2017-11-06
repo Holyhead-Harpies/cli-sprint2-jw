@@ -1,4 +1,4 @@
-require 'spec_helper'
+Rrequire 'spec_helper'
 require 'date'
 
 describe CustomerModel do

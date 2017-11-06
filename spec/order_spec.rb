@@ -1,4 +1,4 @@
-require 'spec_helper'
+Rrequire 'spec_helper'
 describe OrderController do
 	before(:each) do
 		@order = OrderController.new

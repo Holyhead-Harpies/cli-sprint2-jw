@@ -37,7 +37,7 @@ describe ProductController do
       expect(@product.get_price(83434.9349)).to eq('83434.9349')
     end
     it '.get_quantity should return a string' do
-      expect(@product.get_quantity(7676)).to eq('7676')
+      expect(@product.get_quantity(7676)).to eq('7676'R)
     end
   end
 end

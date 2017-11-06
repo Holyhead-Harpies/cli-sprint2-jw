@@ -1,4 +1,4 @@
-require 'spec_helper'
+Rrequire 'spec_helper'
 
 describe PaymentTypeController do
 
@@ -20,7 +20,7 @@ describe PaymentTypeController do
         it "fails with 0 arguments" do
             expect{@pt.ask_for_payment_type_info}.to raise_error(ArgumentError)
         end
-        
+
         it "fails with more than 1 argument" do
             expect{@pt.ask_for_payment_type_info("arg1", "arg2")}.to raise_error(ArgumentError)
         end
@@ -34,7 +34,7 @@ describe PaymentTypeController do
         it "fails with 0 arguments" do
             expect{@pt.set_payment_type_name}.to raise_error(ArgumentError)
         end
-        
+
         it "fails with more than 1 argument" do
             expect{@pt.set_payment_type_name("arg1", "arg2")}.to raise_error(ArgumentError)
         end
@@ -54,7 +54,7 @@ describe PaymentTypeController do
         it "fails with 0 arguments" do
             expect{@pt.set_payment_type_account_number}.to raise_error(ArgumentError)
         end
-        
+
         it "fails with more than 1 argument" do
             expect{@pt.set_payment_type_account_number("arg1", "arg2")}.to raise_error(ArgumentError)
         end
@@ -74,7 +74,7 @@ describe PaymentTypeController do
         it "fails with 0 arguments" do
             expect{@pt.set_payment_type_customer_id}.to raise_error(ArgumentError)
         end
-        
+
         it "fails with more than 1 argument" do
             expect{@pt.set_payment_type_customer_id("arg1", "arg2")}.to raise_error(ArgumentError)
         end

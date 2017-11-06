@@ -19,4 +19,4 @@ describe Product do
   it 'should raise an error without arguments' do
     expect{@product_model.create_new_product}.to raise_error(ArgumentError)
   end
-end
+endR

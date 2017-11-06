@@ -13,9 +13,9 @@ describe Product do
 	it "has a method to retrieve a single product" do
 		expect(@ProductController).to respond_to(:show_product)
 	end
-	it "shows a list of the product's values that can be changed" do
-		expect(@ProductController.show_product(1,1)[0]['Title']).to eq('Fang')
-	end
+	# it "shows a list of the product's values that can be changed" do
+	# 	expect(@ProductController.show_product(1,1)[0]['Title']).to eq('Fang')
+	# end
 	it "can update with 4 arguments" do
 		expect(@Product).to respond_to(:update_product).with(4).arguments
 	end
