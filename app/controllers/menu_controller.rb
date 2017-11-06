@@ -2,7 +2,7 @@ require_relative './customer_controller.rb'
 require_relative './payment_types_controller.rb'
 require_relative './product_controller.rb'
 
-class MainMenuController 
+class MainMenuController
 
     attr_accessor :active_customer
 
@@ -49,7 +49,7 @@ class MainMenuController
                 PaymentTypeController.new.ask_for_payment_type_info(@active_customer)
                 message = "Payment Type added successfully."
                 display_main_menu(message)
-            else 
+            else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
@@ -58,7 +58,7 @@ class MainMenuController
                 ProductController.new.create_product(@active_customer)
                 message = "Product added successfully."
                 display_main_menu(message)
-            else 
+            else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
@@ -66,6 +66,14 @@ class MainMenuController
         when '6'
         when '7'
         when '8'
+            if @active_customer
+                ProductController.new.update_product(@active_customer)
+                message = "Product edited successfully."
+                display_main_menu(message)
+            else
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
         when '9'
         when '10'
         when '11'

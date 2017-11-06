@@ -25,8 +25,6 @@ class Product
     hash_from_controller[:created_at] = date
     hash_from_controller[:updated_at] = date
     begin
-      p @db
-      p hash_from_controller
       statement = "INSERT INTO Products(OwnerId, Title, Description, Price, Quantity, created_at, updated_at) VALUES( '#{hash_from_controller[:customer_id]}',
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
@@ -38,6 +36,61 @@ class Product
       puts 'Exception occurred from ProductModel.create_new_product'
       puts e
       @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  def get_products(customerId)
+    begin
+      products = "SELECT Products.title, ProductId from products where Products.OwnerId == #{customerId}"
+      @db.transaction
+      @db.execute products
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.show_products'
+      puts e
+      @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  def get_product(customerId,productId)
+    begin
+      products = "SELECT Products.title, Products.description, Products.price, Products.quantity from Products where Products.OwnerId = #{customerId} and Products.ProductId = #{productId}"
+      @db.transaction
+      @db.execute products
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.show_products'
+      puts e
+      @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  def remove_product(productId)
+    begin
+      statement = "DELETE FROM Prodcuts WHERE productId = Products.productId"
+      @db.transaction
+      @db.execute statement
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.remove_product'
+      puts e
+    ensure
+      @db.close
+    end
+  end
+
+  def update_product(customerId,productId,field_change,value_change)
+    begin
+      statement = "UPDATE Products SET #{field_change} = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"
+      @db.transaction
+      @db.execute statement
+      @db.commit
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.update_product'
+      puts e
     ensure
       @db.close
     end

@@ -1,8 +1,8 @@
 require_relative '../models/product_model'
 
 ##
-## @brief      Class for Prodcut Controller. Initalized with a
-#               customer_id, title, description, price, quantity
+## @brief      Class for Product Controller. Initalized with a
+#               new Hash
 ##
 class ProductController
   attr_accessor :product_hash
@@ -89,6 +89,64 @@ class ProductController
     get_quantity(quantity)
     Product.new.create_new_product(@product_hash)
   end
+
+  def show_products(customerId)
+    products = Product.new.get_products(customerId)
+    products.each_with_index do |val, inde|
+      puts "#{inde+1}. #{val[0]}"
+    end
+  end
+
+  def show_product(customerId,productId)
+    product = Product.new.get_product(customerId,productId)
+    puts "1. Change Title '#{product[0][0]}'"
+    puts "2. Change Description '#{product[0][1]}'"
+    puts "3. Change Price '#{product[0][2]}'"
+    puts "4. Change Quantity '#{product[0][3]}'"
+    return product
+  end
+
+  def remove_product(customerId)
+    puts 'Select a product: '
+    show_products(customerId)
+    product_id = STDIN.gets.chomp
+    Product.new.remove_product(product_id)
+  end
+
+  def update_product(customerId)
+    puts 'Select a product: '
+    show_products(customerId)
+    product_id = STDIN.gets.chomp
+    show_product(customerId,product_id)
+
+    field_change = STDIN.gets.chomp
+    case field_change
+    when '1'
+      field_change = 'Title'
+
+      puts "Enter new Title"
+
+    when '2'
+      field_change = 'Description'
+
+      puts "Enter new Description"
+
+    when '3'
+      field_change = 'Price'
+
+      puts "Enter new Price"
+
+    when '4'
+      field_change = 'Quantity'
+
+      puts "Enter new Quantity"
+    else
+      puts "Not a valid option!"
+      return
+    end
+
+    value_change = STDIN.gets.chomp
+
+    Product.new.update_product(customerId,product_id,field_change,value_change)
+  end
 end
-
-

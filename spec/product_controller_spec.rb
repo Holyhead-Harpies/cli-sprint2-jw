@@ -1,6 +1,7 @@
+require 'spec_helper'
 require_relative '../app/controllers/product_controller'
 
-describe 'ProductController' do
+describe ProductController do
   before(:each) do
     @product = ProductController.new(54,'Yo', 'This is great', '25.99','5')
   end
