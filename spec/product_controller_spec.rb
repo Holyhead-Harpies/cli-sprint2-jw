@@ -1,12 +1,12 @@
 require_relative '../app/controllers/product_controller'
 
-describe 'ProductController' do
+describe ProductController do
   before(:each) do
-    @product = ProductController.new(54,'Yo', 'This is great', '25.99','5')
+    @product = ProductController.new
   end
   context 'is initialized,' do
     it 'has the same title as what was passed' do
-      expect(@product.get_title('Yo')).to eq('Yo')
+      expect(@product.add_customer_id(54)).to eq(54)
     end
     it 'has the same description as what was passed' do
       expect(@product.get_description('This is great')).to eq('This is great')
@@ -21,9 +21,6 @@ describe 'ProductController' do
       @product.add_customer_id(1)
       expect(@product.product_hash[:customer_id]).to eq(1)
     end
-    it 'should raise an error without arguments' do
-      expect{ProductController.new}.to raise_error(ArgumentError)
-    end
   end
   context 'is passed integer' do
     it '.get_title should return a string' do
@@ -37,6 +34,16 @@ describe 'ProductController' do
     end
     it '.get_quantity should return a string' do
       expect(@product.get_quantity(7676)).to eq('7676')
+    end
+    context '.remove_product is passed no arg' do
+      it 'should raise an error without arguments' do
+        expect{@product.remove_product}.to raise_error(ArgumentError)
+      end
+    end
+    context '.show_products' do
+      it 'can show a list of products' do
+        expect(@product).to respond_to(:show_products)
+      end
     end
   end
 end
