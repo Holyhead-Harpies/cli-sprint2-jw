@@ -38,18 +38,49 @@ class Product
       @db.rollback
     ensure
       @db.close
-    end
+      end
   end
+
+  ## @brief      gets products based on customerId
+  ##
+  ## @param      customerId
+  ##
+  ## @return     returns customers products
+  ##
 
   def get_products(customerId)
     begin
-      products = "SELECT Products.title, ProductId from products where Products.OwnerId == #{customerId}"
-      @db.transaction
+      products = "SELECT Products.title, Products.ProductId from Products where Products.OwnerId == #{customerId.to_i}"
       @db.execute products
     rescue SQLite3::Exception => e
       puts 'Exception occurred from ProductModel.show_products'
       puts e
       @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  ## @brief      removes product based on item not being in the cart/order
+  ##
+  ## @param      productId
+  ##
+  ## @return     message of error or confirmation
+  ##
+
+  def remove_product(productId)
+    begin
+      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      if truth == nil
+        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+        @db.execute statement
+        puts 'Product removed successfully.'
+      else
+        puts "That product is in an active order"
+      end
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.remove_product'
+      puts e
     ensure
       @db.close
     end
@@ -69,18 +100,6 @@ class Product
     end
   end
 
-  def remove_product(productId)
-    begin
-      statement = "DELETE FROM Prodcuts WHERE productId = Products.productId"
-      @db.transaction
-      @db.execute statement
-    rescue SQLite3::Exception => e
-      puts 'Exception occurred from ProductModel.remove_product'
-      puts e
-    ensure
-      @db.close
-    end
-  end
 
   def update_product(customerId,productId,field_change,value_change)
     begin

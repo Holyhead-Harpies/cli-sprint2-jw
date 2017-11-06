@@ -90,12 +90,36 @@ class ProductController
     Product.new.create_new_product(@product_hash)
   end
 
+  ## @brief      Gets produts from model and prints to the console
+  ##
+  ## @param      customerId
+  ##
+  ## @return    Returns a list of products
+  ##
+
   def show_products(customerId)
     products = Product.new.get_products(customerId)
-    products.each_with_index do |val, inde|
-      puts "#{inde+1}. #{val[0]}"
+    products.each_with_index  do |p, i|
+      puts "#{p['ProductId']}. #{p[0]}"
     end
   end
+
+  ## @brief      Remove products from model and prints to the console
+  ##
+  ## @param      customerId
+  ##
+  ## @return    nothing
+  ##
+
+  def remove_product(customerId)
+    puts 'Select a product: '
+    show_products(customerId)
+    product_id = STDIN.gets.chomp
+    Product.new.remove_product(product_id.to_i)
+    return true
+  end
+end
+
 
   def show_product(customerId,productId)
     product = Product.new.get_product(customerId,productId)
@@ -106,12 +130,6 @@ class ProductController
     return product
   end
 
-  def remove_product(customerId)
-    puts 'Select a product: '
-    show_products(customerId)
-    product_id = STDIN.gets.chomp
-    Product.new.remove_product(product_id)
-  end
 
   def update_product(customerId)
     puts 'Select a product: '

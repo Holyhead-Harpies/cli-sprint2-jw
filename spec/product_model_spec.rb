@@ -16,7 +16,19 @@ describe Product do
     }
     @product_model = Product.new
   end
-  it 'should raise an error without arguments' do
-    expect{@product_model.create_new_product}.to raise_error(ArgumentError)
+  context '.create_new_product'do
+    it 'should raise an error without arguments' do
+      expect{@product_model.create_new_product}.to raise_error(ArgumentError)
+    end
   end
-endR
+  context '.get_products with no args 'do
+    it 'should raise an error without arguments' do
+      expect{@product_model.get_products}.to raise_error(ArgumentError)
+    end
+  end
+  context '.remove_products with no args 'do
+    it 'should raise an error without arguments' do
+      expect{@product_model.remove_product}.to raise_error(ArgumentError)
+    end
+  end
+end
