@@ -53,5 +53,19 @@ describe ProductModel do
       expect(@product_model.show_one_product(1)[0][0]).to eq(1)
     end
 
+  context '.create_new_product'do
+    it 'should raise an error without arguments' do
+      expect{@product_model.create_new_product}.to raise_error(ArgumentError)
+    end
+  end
+  context '.get_products with no args 'do
+    it 'should raise an error without arguments' do
+      expect{@product_model.get_products}.to raise_error(ArgumentError)
+    end
+  end
+  context '.remove_products with no args 'do
+    it 'should raise an error without arguments' do
+      expect{@product_model.remove_product}.to raise_error(ArgumentError)
+    end
   end
 end

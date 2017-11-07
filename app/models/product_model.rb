@@ -41,6 +41,98 @@ class ProductModel
       @db.rollback
     ensure
       @db.close
+      end
+  end
+
+  ## @brief      gets products based on customerId
+  ##
+  ## @param      customerId
+  ##
+  ## @return     returns customers products
+  ##
+
+  def get_products(customerId)
+    begin
+      products = "SELECT Products.title, Products.ProductId from Products where Products.OwnerId == #{customerId.to_i}"
+      @db.execute products
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.show_products'
+      puts e
+      @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+  ## @brief      removes product based on item not being in the cart/order
+  ##
+  ## @param      productId
+  ##
+  ## @return     message of error or confirmation
+  ##
+
+  def remove_product(productId)
+    begin
+      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      if truth == []
+        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+        @db.execute statement
+        puts 'Product removed successfully.'
+      else
+        puts "That product is in an active order"
+      end
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.remove_product'
+      puts e
+    ensure
+      @db.close
+    end
+  end
+
+  ##
+  ## @brief      gets a single product for specific customer
+  ##
+  ## @param      customerId  The customer identifier
+  ## @param      productId   The product identifier
+  ##
+  ## @return     The product
+  ##
+  def get_product(customerId,productId)
+    begin
+      products = "SELECT Products.title, Products.description, Products.price, Products.quantity from Products where Products.OwnerId = #{customerId} and Products.ProductId = #{productId}"
+      @db.transaction
+      @db.execute products
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.show_products'
+      puts e
+      @db.rollback
+    ensure
+      @db.close
+    end
+  end
+
+
+  ##
+  ## @brief      updates a single product
+  ##
+  ## @param      customerId    The customer identifier
+  ## @param      productId     The product identifier
+  ## @param      field_change  The field to change
+  ## @param      value_change  The value to change
+  ##
+  ## @return
+  ##
+  def update_product(customerId,productId,field_change,value_change)
+    begin
+      statement = "UPDATE Products SET #{field_change} = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"
+      @db.transaction
+      @db.execute statement
+      @db.commit
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.update_product'
+      puts e
+    ensure
+      @db.close
     end
   end
 
