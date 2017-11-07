@@ -1,6 +1,7 @@
 require_relative './customer_controller.rb'
 require_relative './payment_types_controller.rb'
 require_relative './product_controller.rb'
+require_relative './order_controller.rb'
 
 class MainMenuController
 
@@ -63,6 +64,14 @@ class MainMenuController
             end
         when '5'
         when '6'
+            if @active_customer
+                OrderController.new.complete_current_customer_open_order(@active_customer)
+                message = "Order Successfully completed."
+                display_main_menu(message)
+            else 
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
         when '7'
             if @active_customer
                 ProductController.new.remove_product(@active_customer)
