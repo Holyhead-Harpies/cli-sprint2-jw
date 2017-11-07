@@ -19,7 +19,6 @@ class OrderController
 
 			select_product(selection)
 
-
 			break if selection.downcase == 'l'
 		end
 	end
@@ -34,7 +33,7 @@ class OrderController
 		if  product_id.downcase != 'l'
 			selected_product =  @products_model.show_one_product(product_id)
 			@shopping_cart.push(selected_product[0])
-			# p @shopping_cart
+
 			puts "Your shopping cart contains:"
 			puts '*******************************************'
 			@shopping_cart.each do |item|
@@ -42,5 +41,9 @@ class OrderController
 			end
 			puts '*******************************************'
 		end
+	end
+
+	def save_new_order(product_array)
+
 	end
 end
