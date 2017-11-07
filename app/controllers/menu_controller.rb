@@ -92,7 +92,7 @@ class MainMenuController
             end
         when '9'
             if @active_customer
-                ProductController.stale_products
+                ProductController.new.stale_products
                 message = "Here are the stale products."
                 display_main_menu(message)
             end

@@ -206,7 +206,7 @@ class ProductController
   ## @return prints a number with the title of stale products
   ##
   def stale_products
-    stale = Product.get_stale_products
+    stale = Product.new.get_stale_products
     stale.each_with_index  do |p, i|
       p "#{i+1}. #{p['Title']}"
     end
