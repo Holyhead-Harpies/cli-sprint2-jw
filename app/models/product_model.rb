@@ -99,6 +99,18 @@ class Product
     end
   end
 
+  def get_quantity(product)
+    quantity = @db.execute("select p.Quantity from Products p where p.ProductId = #{product[0]}")
+    return quantity
+  end
+
+  def reduce_quantity(product)
+    old_quantity = get_quantity(product)
+    new_quantity = old_quantity[0][0] - product[:number_on_order]
+    @db.execute("update Products set Quantity = #{new_quantity} where ProductId = #{product[0]}")
+    @db.close
+  end
+
   ##
   ## @brief      gets a single product for specific customer
   ##
