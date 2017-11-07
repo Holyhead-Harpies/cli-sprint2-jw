@@ -111,5 +111,4 @@ class PaymentTypeController
         @payment_type_info[:customer_id] = customerId
     end
 
-
 end

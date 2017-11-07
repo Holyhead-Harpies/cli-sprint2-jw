@@ -86,6 +86,19 @@ class Product
     end
   end
 
+  def get_product_price_info(product_id)
+    begin 
+      return @db.execute("select p.ProductId, p.Title, p.Price from Products p where p.ProductId = #{product_id}")
+    rescue SQLite3::Exception => e
+      @db.rollback
+    else
+      
+    ensure
+      @db.close
+      
+    end
+  end
+
   ##
   ## @brief      gets a single product for specific customer
   ##

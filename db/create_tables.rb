@@ -38,7 +38,7 @@ begin
     db.execute("CREATE TABLE `Orders` (
     `OrderId` INTEGER NOT NULL PRIMARY KEY autoincrement,
     `CustomerId` integer not null,
-    `PaymentTypeId` integer not null,
+    `PaymentTypeId` integer,
     `Completed` BOOLEAN not null,
     `created_at`    datetime NOT NULL,
     `updated_at`    datetime NOT NULL,
