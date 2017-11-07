@@ -2,7 +2,7 @@ require 'spec_helper'
 describe OrderController do
 	before(:each) do
 		@order_controller = OrderController.new
-		@ordermodel = OrderModel.new('./db/test.sqlite')
+		@ordermodel = OrderModel.new('../db/test.sqlite')
 	end
 
 	context 'A new order is created' do
@@ -34,8 +34,10 @@ describe OrderController do
 			expect{@ordermodel.add_product_to_order('one arg')}.to raise_error(ArgumentError)
 		end
 
+	end
+
 	it "can show a list of products" do
-		expect(@order).to respond_to(:showproducts)
+		expect(@order_controller).to respond_to(:show_products)
 	end
 
 	context "@ordermodel.get_current_customer_open_orders(id)" do
@@ -97,20 +99,38 @@ describe OrderController do
 
 	context "@order.get_payment_type_id" do
 		it "takes two arguments" do
-			expect(@order).to respond_to(:get_payment_type_id).with(2).arguments
+			expect(@order_controller).to respond_to(:get_payment_type_id).with(2).arguments
 		end
 
 		it "gets the correct payment type based on customer input" do
 			option = 1
 			payment_types = [{0 => 1}]
-			expect(@order.get_payment_type_id(option, payment_types)).to eq(payment_types[option - 1][0])
+			expect(@order_controller.get_payment_type_id(option, payment_types)).to eq(payment_types[option - 1][0])
 		end
 	end
 
 	context "@order.get_total_price_of_order" do
 		it "returns correct sum" do
 			products = [{2 => 5, :number_on_order => 2}, {2 => 5, :number_on_order => 1}]
-			expect(@order.get_total_price_of_order(products)).to eq(15)
+			expect(@order_controller.get_total_price_of_order(products)).to eq(15)
+		end
+	end
+
+	context 'the user is creating a new order' do
+		it 'has a method create_new_order' do
+			expect(@order_controller).to respond_to(:create_new_order)
+		end
+
+		it 'raises an argument error if no argument is given' do
+			expect{@order_controller.create_new_order}.to raise_error(ArgumentError)
+		end
+
+		it 'returns an integer if a new order is created' do
+			expect(@order_controller.create_new_order(5)).to be_a(Integer)
+		end
+
+		it '@order_model has a method for creating a new order' do
+			expect(@ordermodel).to respond_to(:create_new_order)
 		end
 	end
 

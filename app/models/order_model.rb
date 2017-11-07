@@ -14,6 +14,26 @@ class OrderModel
 		SQLite3::Database.open(@database)
 	end
 
+	def create_new_order(customer_id)
+		d = DateTime.now
+		date = "#{d.month}/#{d.day}/#{d.year}"
+		@db = open_db_connection
+		begin
+			statement = "INSERT INTO Orders (CustomerId, PaymentTypeId, Completed, created_at, updated_at) VALUES('#{customer_id}', '0', '0', '#{date}', '#{date}')"
+		    @db.transaction
+		    @db.execute statement
+		    @db.commit
+		    order_id = @db.last_insert_row_id
+		rescue SQLite3::Exception => e
+		    puts 'Exception occurred from OrderModel.add_product_to_order'
+		    puts e
+		    @db.rollback
+		ensure
+			@db.close
+		end
+		return order_id
+	end
+
   ## @brief      adds an order id associated with a product id to the OrdersProducts table in the db
   ## @param      order id and product id
   ## @return     none
@@ -38,8 +58,10 @@ class OrderModel
 	end
 
 	def get_current_customer_open_orders(customerId)
+		@db = open_db_connection
 		order = @db.execute("select o.* from Orders o where o.CustomerId = '#{customerId}' and o.Completed = '0'")
 		@db.close
+		puts "get_current_customer_open_orders output is #{order} "
 		return order
 	end
 

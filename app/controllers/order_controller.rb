@@ -1,6 +1,6 @@
-require './app/models/order_model.rb'
-require './app/models/product_model.rb'
-require './app/models/payment_types_model.rb'
+require_relative '../models/order_model.rb'
+require_relative '../models/product_model.rb'
+require_relative '../models/payment_types_model.rb'
 
 class OrderController
 
@@ -10,12 +10,16 @@ class OrderController
 		@shopping_cart = Array.new
 	end
 
-
 	  ## @brief      runs user interactions for adding a product to an open order
 	  ## @param      none
 	  ## @return     none
-	def add_product_to_order
+	def add_product_to_order(active_customer)
 		@all_products = @products_model.show_all_products
+		@order_id = @order_model.get_current_customer_open_orders(active_customer)
+		if @order_id = []
+			@order_id = create_new_order(active_customer)
+		end
+
 		loop do
 			puts "Please select a product to add to the order:"
 			show_products
@@ -23,7 +27,7 @@ class OrderController
 			puts "Enter the ID number of the product you want to add, or type 'L' to leave."
 			selection = STDIN.gets.chomp
 
-			select_product(selection)
+			select_product(@order_id, selection)
 
 			break if selection.downcase == 'l'
 		end
@@ -54,6 +58,10 @@ class OrderController
 			end
 			puts '*******************************************'
 		end
+	end
+
+	def create_new_order(customer_id)
+		@order_model.create_new_order(customer_id)
 	end
 
 	def complete_current_customer_open_order(customerId)
