@@ -28,21 +28,45 @@ class OrderController
 				product_info << Product.new.get_product_price_info(p[0])
 				product_info[i][0][:number_on_order] = all_products_on_order[i][1]
 			end
-			sum = get_total_price_of_order(product_info.flatten)
-			puts "Your order total is $#{sum}. Ready to purchase?"
-			puts "(y/n)"
-			if is_customer_ready_to_purchase?
-				payment_types_current_customer = PaymentTypeModel.new.get_current_customer_payment_types(customerId)
-				show_current_customer_payment_options(payment_types_current_customer)
-				option = STDIN.gets.chomp.to_i
-				payment_type_id = get_payment_type_id(option, payment_types_current_customer)
-				OrderModel.new.add_payment_type_to_open_order(open_order[0][0], payment_type_id)
-				OrderModel.new.set_order_status_completed_to_true(open_order[0][0])
-			else 
-				return
+			product_info = product_info.flatten
+			quantities_available = Array.new
+			wanted_quantities = Array.new
+			product_info.each do |p|
+				quantity_available = Product.new.get_quantity(p)
+				quantities_available << quantity_available[0][0]
+				wanted_quantities << p[:number_on_order]
+			end
+			less_than_available = false
+			quantities_available.length.times do |q|
+				if quantities_available[q] - wanted_quantities[q] < 0
+					less_than_available = true
+				end
+			end
+			if less_than_available
+			else
+				sum = get_total_price_of_order(product_info)
+				puts "Your order total is $#{sum}. Ready to purchase?"
+				puts "(y/n)"
+				if is_customer_ready_to_purchase?
+					payment_types_current_customer = PaymentTypeModel.new.get_current_customer_payment_types(customerId)
+					show_current_customer_payment_options(payment_types_current_customer)
+					option = STDIN.gets.chomp.to_i
+					payment_type_id = get_payment_type_id(option, payment_types_current_customer)
+					OrderModel.new.add_payment_type_to_open_order(open_order[0][0], payment_type_id)
+					OrderModel.new.set_order_status_completed_to_true(open_order[0][0])
+					reduce_products_quantity(product_info)
+				else 
+					return
+				end
 			end
 			
         end
+	end
+
+	def reduce_products_quantity(products)
+		products.each do |p|
+			Product.new.reduce_quantity(p)
+		end
 	end
 
 	def get_payment_type_id(option, payment_types)
@@ -71,6 +95,7 @@ class OrderController
 	end
 
 	def get_total_price_of_order(products)
+		p products
 		sum = 0
 		products.each do |p|
 			sum += p[2] * p[:number_on_order]
