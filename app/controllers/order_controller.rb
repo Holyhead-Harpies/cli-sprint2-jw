@@ -5,6 +5,7 @@ class OrderController
 
 	def initialize
 		@products_model = ProductModel.new('./db/test.sqlite')
+		@shopping_cart = Array.new
 	end
 
 	def create_new_order
@@ -18,7 +19,6 @@ class OrderController
 
 			select_product(selection)
 
-			puts all_products
 
 			break if selection.downcase == 'l'
 		end
@@ -31,9 +31,16 @@ class OrderController
 	end
 
 	def select_product(product_id)
-		if product_id.is_a? Integer || product_id.downcase != 'l'
+		if  product_id.downcase != 'l'
 			selected_product =  @products_model.show_one_product(product_id)
-			selected_product
+			@shopping_cart.push(selected_product[0])
+			# p @shopping_cart
+			puts "Your shopping cart contains:"
+			puts '*******************************************'
+			@shopping_cart.each do |item|
+				puts "#{item['ProductId']} #{item['Title']}"
+			end
+			puts '*******************************************'
 		end
 	end
 end

@@ -169,7 +169,7 @@ class ProductModel
     @db = open_db_connection
     @db.results_as_hash = true
     @db.results_as_hash
-    statement = "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products WHERE ProductID = #{product_id}"
+    statement = "SELECT ProductId, Title FROM Products WHERE ProductID = #{product_id}"
     @db.transaction
     product = @db.execute statement
     @db.close
