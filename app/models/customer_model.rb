@@ -35,4 +35,10 @@ class CustomerModel
 	def get_all_customers
 		stm = @db.execute "select * from Customers"
 	end
+
+	def get_unique_customers(product)
+		queried_product = @db.execute("select p.ProductId, count(distinct c.CustomerId) 'Num Orders' from Orders o, Products p, OrdersProducts op, Customers c where o.Completed = '1' and o.OrderId = op.OrderId and op.ProductId = p.ProductId and o.CustomerId = c.CustomerId and p.ProductId = #{product[0]} group by op.ProductId")
+		@db.close
+		return queried_product[0][1]
+	end
 end

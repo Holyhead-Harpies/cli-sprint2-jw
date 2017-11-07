@@ -157,4 +157,5 @@ class Product
       @db.close
     end
   end
+
 end

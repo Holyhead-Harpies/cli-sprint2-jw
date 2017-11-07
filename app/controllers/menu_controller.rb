@@ -93,6 +93,14 @@ class MainMenuController
         when '9'
         when '10'
         when '11'
+            if @active_customer
+                ProductController.new.show_popular_products(@active_customer)
+                message = ""
+                display_main_menu(message)
+            else
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
         when '12'
             system "clear"
             return
