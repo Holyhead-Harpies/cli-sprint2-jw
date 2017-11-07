@@ -45,6 +45,11 @@ describe ProductController do
         expect(@product).to respond_to(:show_products)
       end
     end
+    context '.get_stale_products' do
+      it 'can show a list of stale_products' do
+        expect(@product).to respond_to(:stale_products)
+      end
+    end
   end
 end
 

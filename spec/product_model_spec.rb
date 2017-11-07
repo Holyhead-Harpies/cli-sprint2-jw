@@ -31,4 +31,10 @@ describe Product do
       expect{@product_model.remove_product}.to raise_error(ArgumentError)
     end
   end
+  context '.get_stale_products' do
+    it 'can show a list of stale_products' do
+      expect(@product_model).to respond_to(:get_stale_products)
+    end
+  end
 end
+

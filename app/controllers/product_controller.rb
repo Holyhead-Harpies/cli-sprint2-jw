@@ -198,6 +198,13 @@ class ProductController
     end
   end
 
+  ##
+  ## @brief  gets 'stale' products according to the specs
+  ##
+  ##
+  ##
+  ## @return prints a number with the title of stale products
+  ##
   def stale_products
     stale = Product.get_stale_products
     stale.each_with_index  do |p, i|

@@ -146,6 +146,13 @@ class Product
     end
   end
 
+  ##
+  ## @brief      gets 'stale' products according to the specs
+  ##
+  ##
+  ##
+  ## @return list of stale products
+  ##
   def get_stale_products
     now = Date.today
     one_eighty_days_ago = (now - 180)
@@ -160,11 +167,11 @@ class Product
                             OrdersProducts.ProductId != null and Products.quantity > 0 and Products.created_at < #{one_eighty_days_ago}"
       @db.transaction
       @db.execute stale_products
-      stale_products
-
-    end
-    begin
-
+    rescue SQLite3::Exception => e
+      puts 'Exception occurred from ProductModel.update_product'
+      puts e
+    ensure
+      @db.close
     end
   end
 
