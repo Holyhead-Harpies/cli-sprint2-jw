@@ -60,6 +60,10 @@ class OrderController
 		end
 	end
 
+
+	## @brief      creates a new order in the Orders table
+	## param		the id of the active customer
+	## @return     the id of the order created
 	def create_new_order(customer_id)
 		@order_model.create_new_order(customer_id)
 	end

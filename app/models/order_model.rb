@@ -3,7 +3,7 @@ require 'date'
 
 class OrderModel
 
-	def initialize(database = './db/sprint2.sqlite')
+	def initialize(database = '../db/sprint2.sqlite')
 		@database = database
 	end
 
@@ -14,6 +14,9 @@ class OrderModel
 		SQLite3::Database.open(@database)
 	end
 
+	## @brief      creates a new order in the database
+	## param		the id of the active customer
+	## return 		the id of the order created
 	def create_new_order(customer_id)
 		d = DateTime.now
 		date = "#{d.month}/#{d.day}/#{d.year}"
