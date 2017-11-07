@@ -30,8 +30,4 @@ describe OrderController do
 		expect(@order_controller).to respond_to(:remove_product_from_list).with(2).arguments
 	end
 
-	it 'removes the specified array from the products list' do
-		
-	end
-
 end

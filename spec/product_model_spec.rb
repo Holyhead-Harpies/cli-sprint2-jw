@@ -14,7 +14,7 @@ describe ProductModel do
       created_at: date,
       updated_at: date
     }
-    @product_model = ProductModel.new('./db/sprint2.sqlite')
+    @product_model = ProductModel.new('./db/test.sqlite')
   end
   context 'Creating a new product...' do
 
@@ -52,6 +52,7 @@ describe ProductModel do
     it 'should return the data that was requested' do
       expect(@product_model.show_one_product(1)[0][0]).to eq(1)
     end
+  end
 
   context '.create_new_product'do
     it 'should raise an error without arguments' do

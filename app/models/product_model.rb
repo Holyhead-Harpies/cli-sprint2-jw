@@ -6,7 +6,7 @@ require 'sqlite3'
 ##
 class ProductModel
 
-  def initialize(database = './db/test.sqlite')
+  def initialize(database = './db/sprint2.sqlite')
     @database = database
   end
 
@@ -32,6 +32,8 @@ class ProductModel
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
                   '#{hash_from_controller[:created_at]}', '#{hash_from_controller[:updated_at]}')"
+      @db = open_db_connection
+      @db.results_as_hash = true
       @db.transaction
       @db.execute statement
       @db.commit
@@ -54,6 +56,8 @@ class ProductModel
   def get_products(customerId)
     begin
       products = "SELECT Products.title, Products.ProductId from Products where Products.OwnerId == #{customerId.to_i}"
+      @db = open_db_connection
+      @db.results_as_hash = true
       @db.execute products
     rescue SQLite3::Exception => e
       puts 'Exception occurred from ProductModel.show_products'
@@ -73,6 +77,8 @@ class ProductModel
 
   def remove_product(productId)
     begin
+      @db = open_db_connection
+      @db.results_as_hash = true
       truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
       if truth == []
         statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
@@ -100,6 +106,8 @@ class ProductModel
   def get_product(customerId,productId)
     begin
       products = "SELECT Products.title, Products.description, Products.price, Products.quantity from Products where Products.OwnerId = #{customerId} and Products.ProductId = #{productId}"
+      @db = open_db_connection
+      @db.results_as_hash = true
       @db.transaction
       @db.execute products
     rescue SQLite3::Exception => e
@@ -124,7 +132,9 @@ class ProductModel
   ##
   def update_product(customerId,productId,field_change,value_change)
     begin
-      statement = "UPDATE Products SET #{field_change} = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"
+      @db = open_db_connection
+      @db.results_as_hash = true
+      statement = "UPDATE Products SET '#{field_change}' = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"
       @db.transaction
       @db.execute statement
       @db.commit
@@ -142,6 +152,7 @@ class ProductModel
 
   def show_all_products
     @db = open_db_connection
+    @db.results_as_hash = true
     @db.results_as_hash
     @db.transaction
     products = @db.execute "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products"
@@ -156,6 +167,7 @@ class ProductModel
 
   def show_one_product(product_id)
     @db = open_db_connection
+    @db.results_as_hash = true
     @db.results_as_hash
     statement = "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products WHERE ProductID = #{product_id}"
     @db.transaction
