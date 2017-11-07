@@ -6,10 +6,16 @@ class OrderModel
 		@database = database
 	end
 
+  ## @brief      opens a connection to the database specified when class is initialized
+  ## @param      none
+  ## @return     returns connection to database
 	def open_db_connection
 		SQLite3::Database.open(@database)
 	end
 
+  ## @brief      adds an order id associated with a product id to the OrdersProducts table in the db
+  ## @param      order id and product id
+  ## @return     none
 	def add_product_to_order(order_id, product_id)
 		d = DateTime.now
 		date = "#{d.month}/#{d.day}/#{d.year}"

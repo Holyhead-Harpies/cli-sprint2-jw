@@ -4,11 +4,15 @@ require './app/models/product_model.rb'
 class OrderController
 
 	def initialize
-		@products_model = ProductModel.new('./db/test.sqlite')
+		@products_model = ProductModel.new
+		@order_model = OrderModel.new
 		@shopping_cart = Array.new
 	end
 
-	def create_new_order
+	  ## @brief      runs user interactions for adding a product to an open order
+	  ## @param      none
+	  ## @return     none
+	def add_product_to_order
 		@all_products = @products_model.show_all_products
 		loop do
 			puts "Please select a product to add to the order:"
@@ -23,14 +27,21 @@ class OrderController
 		end
 	end
 
+	  ## @brief      displays all products in the database, shows id# and title
+	  ## @param      none
+	  ## @return     none
 	def show_products
 		@all_products.each do |item|
 			puts "#{item["ProductId"]} #{item["Title"]}"
 		end
 	end
 
-	def select_product(product_id)
+	  ## @brief      adds a new product to the OrdersProducts table in the database
+	  ## @param      order id (of open order) and id of selected product
+	  ## @return     none
+	def select_product(order_id, product_id)
 		if  product_id.downcase != 'l'
+			@order_model.add_product_to_order(order_id, product_id)
 			selected_product =  @products_model.show_one_product(product_id)
 			@shopping_cart.push(selected_product[0])
 
@@ -41,9 +52,5 @@ class OrderController
 			end
 			puts '*******************************************'
 		end
-	end
-
-	def save_new_order(product_array)
-
 	end
 end
