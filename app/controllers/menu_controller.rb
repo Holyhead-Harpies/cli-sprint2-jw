@@ -105,6 +105,4 @@ class MainMenuController
         end
 
     end
-
-
 end

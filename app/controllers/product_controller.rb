@@ -207,9 +207,10 @@ class ProductController
   ##
   def stale_products
     stale = Product.new.get_stale_products
-    stale.each_with_index  do |p, i|
-      p "#{i+1}. #{p['Title']}"
+    p stale
+    # stale.each_with_index  do |p, i|
+    #   p "#{i+1}. #{p['Title']}"
     end
 
   end
-end
+

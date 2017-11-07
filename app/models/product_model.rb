@@ -147,7 +147,11 @@ class Product
   end
 
   ##
-  ## @brief      gets 'stale' products according to the specs
+  ## @brief      gets 'stale' products if Product hasn't been placed in an order and the order is over 180 days old,
+  ##             If the order was created over 90 days ago and not on a completed order
+  ##            and if the product was added to an order, there is still quantity and the product has been in the system
+  ##            for more than 180 days
+  ##
   ##
   ##
   ##
@@ -161,8 +165,8 @@ class Product
       stale_products =  "SELECT Products.Title as Product from Products join OrdersProducts where Products.ProductId !=
                         OrdersProducts.ProductId and Products.created_at < #{one_eighty_days_ago}
                         UNION
-                         SELECT Products.Title from Products join OrdersProducts where OrdersProducts.created_at <
-                        #{ninety_days_ago}
+                         SELECT Products.Title from Products join Orders, OrdersProducts where OrdersProducts.created_at <
+                        #{ninety_days_ago} and Orders.completed == '0'
                         UNION
                         SELECT  Products.Title from Products join Orders, OrdersProducts where Orders.completed == '1'
                         and OrdersProducts.ProductId != null and Products.quantity > 0 and Products.created_at <
