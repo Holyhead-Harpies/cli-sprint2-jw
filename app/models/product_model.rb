@@ -145,4 +145,27 @@ class Product
       @db.close
     end
   end
+
+  def get_stale_products
+    now = Date.today
+    one_eighty_days_ago = (now - 180)
+    ninety_days_ago = (now-90)
+    begin
+      stale_products =  "SELECT Products.ProductId as Product from Products join OrdersProducts where Products.ProductId != OrdersProducts.ProductId and
+                            Products.created_at < #{one_eighty_days_ago}
+                            UNION ALL
+                            SELECT  OrdersProducts.ProductId from OrdersProducts where created_at < #{ninety_days_ago}
+                            UNION ALL
+                            SELECT  Products.ProductId from Products join Orders, OrdersProducts where Orders.completed == '1' and
+                            OrdersProducts.ProductId != null and Products.quantity > 0 and Products.created_at < #{one_eighty_days_ago}"
+      @db.transaction
+      @db.execute stale_products
+      stale_products
+
+    end
+    begin
+
+    end
+  end
+
 end

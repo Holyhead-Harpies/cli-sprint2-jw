@@ -196,8 +196,13 @@ class ProductController
       p "Not an option!"
       return
     end
+  end
 
-
+  def stale_products
+    stale = Product.get_stale_products
+    stale.each_with_index  do |p, i|
+      p "#{i+1}. #{p['Title']}"
+    end
 
   end
 end

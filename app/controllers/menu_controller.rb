@@ -91,6 +91,11 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '9'
+            if @active_customer
+                ProductController.stale_products
+                message = "Here are the stale products."
+                display_main_menu(message)
+            end
         when '10'
         when '11'
         when '12'
