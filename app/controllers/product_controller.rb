@@ -236,7 +236,7 @@ class ProductController
     closed_orders = OrderModel.new.get_all_products_on_closed_orders
     products_with_total_revenue = Array.new
     closed_orders.each do |o|
-      o[:total_revenue] = o[2] * o[3]
+      o[:total_revenue] = (o[2] * o[3]).round(2)
       products_with_total_revenue << o
     end
 
@@ -250,6 +250,9 @@ class ProductController
     end
 
     print_products(top_three_sellers)
+    puts
+    puts "Press enter to return to the menu."
+    STDIN.gets.chomp
 
   end
 
@@ -262,6 +265,7 @@ class ProductController
   ## @return     the printed top 3 selling products
   ##
   def print_products(products)
+    system "clear"
     total_orders = (products[0][:number_orders] + products[1][:number_orders] + products[2][:number_orders]).to_s.split('')
     total_customers = (products[0][:number_customers] + products[1][:number_customers] + products[2][:number_customers]).to_s.split('')
     total_revenue = (products[0][:total_revenue] + products[1][:total_revenue] + products[2][:total_revenue]).round(2).to_s.split('')

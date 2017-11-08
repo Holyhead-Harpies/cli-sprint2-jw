@@ -114,6 +114,7 @@ class OrderController
 				end
 			end
 			if less_than_available
+				puts "Not enough quantity available for one or more of the products on your order."
 			else
 				sum = get_total_price_of_order(product_info)
 				puts "Your order total is $#{sum}. Ready to purchase?"

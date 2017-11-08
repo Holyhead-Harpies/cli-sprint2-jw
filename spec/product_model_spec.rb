@@ -31,7 +31,8 @@ describe ProductModel do
     end
 
     it 'should return an array' do
-      expect(@product_model.show_all_products).to be_a(Array)
+      @product = ProductModel.new
+      expect(@product.show_all_products).to be_a(Array)
     end
   end
 
@@ -46,11 +47,13 @@ describe ProductModel do
     end
 
     it 'should return an array with one item' do
-      expect(@product_model.show_one_product(1)).to be_a(Array)
+      @product = ProductModel.new
+      expect(@product.show_one_product(1)).to be_a(Array)
     end
 
     it 'should return the data that was requested' do
-      expect(@product_model.show_one_product(1)[0][0]).to eq(1)
+      @product = ProductModel.new
+      expect(@product.show_one_product(1)[0][0]).to eq(1)
     end
   end
 
@@ -67,6 +70,14 @@ describe ProductModel do
   context '.remove_products with no args 'do
     it 'should raise an error without arguments' do
       expect{@product_model.remove_product}.to raise_error(ArgumentError)
+    end
+  end
+
+  context '.get_quantity' do
+    it 'should return an array' do
+      hash = {0 => 1}
+      @product = ProductModel.new
+      expect(@product.get_quantity(hash)).to be_a(Array)
     end
   end
 end

@@ -39,7 +39,6 @@ class MainMenuController
     ## @return     the results of the different queries a customer chooses to make
     ##
     def display_main_menu(message)
-        # system "clear"
         puts message
         puts "*********************************************************"
         puts "**  Welcome to Bangazon! Command Line Ordering System  **"
@@ -59,49 +58,61 @@ class MainMenuController
         option = get_user_input
         case option
         when '1'
+            system "clear"
             @active_customer = CustomerController.new.create_new_customer
             message = "Customer add successully."
             display_main_menu(message)
         when '2'
+            system "clear"
+            
             @active_customer = CustomerController.new.show_all_customers
             message = "Successfully activated customer."
             display_main_menu(message)
         when '3'
+            system "clear"
+            
             if @active_customer
                 PaymentTypeController.new.ask_for_payment_type_info(@active_customer)
-                message = "Payment Type added successfully."
-                display_main_menu(message)
+                display_main_menu('')
             else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
         when '4'
+            system "clear"
+            
             if @active_customer
                 ProductController.new.create_product(@active_customer)
-                display_main_menu(message)
+                display_main_menu('')
             else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
         when '5'
+            system "clear"
+            
             if @active_customer
                 OrderController.new.add_product_to_order(@active_customer)
-                display_main_menu(message)
+                display_main_menu('')
             else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
 
         when '6'
+            system "clear"
+            
             if @active_customer
                 OrderController.new.complete_current_customer_open_order(@active_customer)
                 message = "Order Successfully completed."
-                display_main_menu(message)
+                display_main_menu('')
             else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
         when '7'
+            system "clear"
+            
             if @active_customer
                 ProductController.new.remove_product(@active_customer)
                 message = ''
@@ -111,6 +122,8 @@ class MainMenuController
               display_main_menu(message)
             end
         when '8'
+            system "clear"
+            
             if @active_customer
                 ProductController.new.update_product(@active_customer)
                 message = "Product edited successfully."
@@ -120,7 +133,9 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '9'
-                ProductController.new.show_popular_products(@active_customer)
+            system "clear"
+            ProductController.new.show_popular_products(@active_customer)
+            display_main_menu('')
         when '10'
             system "clear"
             return
