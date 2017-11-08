@@ -63,6 +63,14 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '5'
+            if @active_customer
+                OrderController.new.add_product_to_order(@active_customer)
+                display_main_menu(message)
+            else
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
+
         when '6'
             if @active_customer
                 OrderController.new.complete_current_customer_open_order(@active_customer)

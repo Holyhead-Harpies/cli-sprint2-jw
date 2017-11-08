@@ -1,18 +1,70 @@
 require 'sqlite3'
+require 'date'
+
 class OrderModel
 
-	def initialize
-		@db = SQLite3::Database.open('./db/sprint2.sqlite')
-		@db.results_as_hash = true
+	def initialize(database = './db/sprint2.sqlite')
+		@database = database
 	end
 
-	def showproducts
+  ## @brief      opens a connection to the database specified when class is initialized
+  ## @param      none
+  ## @return     returns connection to database
+	def open_db_connection
+		SQLite3::Database.open(@database)
+	end
 
+	## @brief      creates a new order in the database
+	## param		the id of the active customer
+	## return 		the id of the order created
+	def create_new_order(customer_id)
+		d = DateTime.now
+		date = "#{d.month}/#{d.day}/#{d.year}"
+		@db = open_db_connection
+		begin
+			statement = "INSERT INTO Orders (CustomerId, PaymentTypeId, Completed, created_at, updated_at) VALUES('#{customer_id}', '0', '0', '#{date}', '#{date}')"
+		    @db.transaction
+		    @db.execute statement
+		    @db.commit
+		    order_id = @db.last_insert_row_id
+		rescue SQLite3::Exception => e
+		    puts 'Exception occurred from OrderModel.add_product_to_order'
+		    puts e
+		    @db.rollback
+		ensure
+			@db.close
+		end
+		return order_id
+	end
+
+  ## @brief      adds an order id associated with a product id to the OrdersProducts table in the db
+  ## @param      order id and product id
+  ## @return     none
+	def add_product_to_order(order_id, product_id)
+		d = DateTime.now
+		date = "#{d.month}/#{d.day}/#{d.year}"
+		@db = open_db_connection
+		begin
+			statement = "INSERT INTO OrdersProducts(OrderId, ProductId, created_at, updated_at)
+						VALUES('#{order_id}', '#{product_id}', '#{date}', '#{date}')"
+		    @db.results_as_hash = true
+		    @db.transaction
+		    @db.execute statement
+		    @db.commit
+		rescue SQLite3::Exception => e
+		    puts 'Exception occurred from OrderModel.add_product_to_order'
+		    puts e
+		    @db.rollback
+		ensure
+			@db.close
+		end
 	end
 
 	def get_current_customer_open_orders(customerId)
+		@db = open_db_connection
 		order = @db.execute("select o.* from Orders o where o.CustomerId = '#{customerId}' and o.Completed = '0'")
 		@db.close
+		puts "get_current_customer_open_orders output is #{order} "
 		return order
 	end
 
