@@ -3,18 +3,41 @@ require_relative './payment_types_controller.rb'
 require_relative './product_controller.rb'
 require_relative './order_controller.rb'
 
+
+##
+## @brief      Controls the data flow from all Models and Controllers
+##
 class MainMenuController
 
     attr_accessor :active_customer
 
+    ##
+    ## @brief      initializes active customer
+    ##
+    ## @param      active_customer  The active customer
+    ##
+    ## @return     active customer
+    ##
     def initialize(active_customer = nil)
         @active_customer = active_customer
     end
 
+    ##
+    ## @brief      Gets the user input.
+    ##
+    ## @return     The user input.
+    ##
     def get_user_input
         STDIN.gets.chomp
     end
 
+    ##
+    ## @brief      displays menu options with various controller/model methods
+    ##
+    ## @param      message  The message
+    ##
+    ## @return     the results of the different queries a customer chooses to make
+    ##
     def display_main_menu(message)
         # system "clear"
         puts message
@@ -74,7 +97,7 @@ class MainMenuController
                 OrderController.new.complete_current_customer_open_order(@active_customer)
                 message = "Order Successfully completed."
                 display_main_menu(message)
-            else 
+            else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end

@@ -1,12 +1,13 @@
 require_relative '../models/payment_types_model.rb'
 
+
 ##
-## @brief PaymentTypeController class. This class handles user interaction for payment type actions. It is initialized with an empty hash that is used to create a payment type for the active customer.
+## @brief      Controls the data flow from PaymentTypeModel to Menu
 ##
 class PaymentTypeController
 
     attr_accessor :payment_type_info
-    
+
     def initialize(payment_type_info = Hash.new)
         @payment_type_info = payment_type_info
     end
@@ -37,7 +38,7 @@ class PaymentTypeController
     ##
     ## @author M. Lindstrom
     ##
-    ## @params 
+    ## @params
     ##
     ## @returns One or two methods. If successfully it will call the method to set the correct info.
     ## If unsuccessful, it will call itself to prompt the user to input correct information.
@@ -51,13 +52,13 @@ class PaymentTypeController
             set_payment_type_name(name)
         end
     end
-    
+
     ##
     ## @brief Method is called in ask_for_payment_type_info. This method gets a user's input for account number and calls the appropriate method.
     ##
     ## @author M. Lindstrom
     ##
-    ## @params 
+    ## @params
     ##
     ## @returns One or two methods. If successfully it will call the method to set the correct info.
     ## If unsuccessful, it will call itself to prompt the user to input correct information.
@@ -79,12 +80,12 @@ class PaymentTypeController
     ##
     ## @params One parameter for the payment type name inputed by the user.
     ##
-    ## @returns 
+    ## @returns
     ##
     def set_payment_type_name(name)
         @payment_type_info[:name] = name
     end
-    
+
     ##
     ## @brief Method is called in get_payment_type_account_number. Sets the :account_number in the payment_type_info hash
     ##
@@ -92,20 +93,20 @@ class PaymentTypeController
     ##
     ## @params One parameter for the account number inputed by the user.
     ##
-    ## @returns 
+    ## @returns
     ##
     def set_payment_type_account_number(account_number)
         @payment_type_info[:account_number] = account_number
     end
-    
+
     ##
     ## @brief Method is called in ask_for_payment_type_info. Sets the :customer_id in the payment_type_info hash
     ##
     ## @author M. Lindstrom
     ##
-    ## @params One parameter for the ID of the active customer. 
+    ## @params One parameter for the ID of the active customer.
     ##
-    ## @returns 
+    ## @returns
     ##
     def set_payment_type_customer_id(customerId)
         @payment_type_info[:customer_id] = customerId
