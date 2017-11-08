@@ -16,7 +16,7 @@ class OrderController
 	def add_product_to_order(active_customer)
 		@all_products = @products_model.show_all_products
 		@order_id = @order_model.get_current_customer_open_orders(active_customer)
-		if @order_id = []
+		if @order_id == []
 			@order_id = create_new_order(active_customer)
 		end
 
@@ -47,7 +47,9 @@ class OrderController
 	  ## @return     none
 	def select_product(order_id, product_id)
 		if  product_id.downcase != 'l'
-			@order_model.add_product_to_order(order_id, product_id)
+			p order_id
+			p product_id
+			@order_model.add_product_to_order(order_id[0][0], product_id.to_i)
 			selected_product =  @products_model.show_one_product(product_id)
 			@shopping_cart.push(selected_product[0])
 
@@ -75,16 +77,18 @@ class OrderController
             STDIN.gets.chomp
 		else
 			all_products_on_order = OrderModel.new.get_all_products_from_order(open_order[0][0])
+			p all_products_on_order
 			product_info = Array.new
 			all_products_on_order.each_with_index do |p, i|	
-				product_info << Product.new.get_product_price_info(p[0])
+				product_info << ProductModel.new.get_product_price_info(p[0])
+				p product_info
 				product_info[i][0][:number_on_order] = all_products_on_order[i][1]
 			end
 			product_info = product_info.flatten
 			quantities_available = Array.new
 			wanted_quantities = Array.new
 			product_info.each do |p|
-				quantity_available = Product.new.get_quantity(p)
+				quantity_available = ProductModel.new.get_quantity(p)
 				quantities_available << quantity_available[0][0]
 				wanted_quantities << p[:number_on_order]
 			end
@@ -117,7 +121,7 @@ class OrderController
 
 	def reduce_products_quantity(products)
 		products.each do |p|
-			Product.new.reduce_quantity(p)
+			ProductModel.new.reduce_quantity(p)
 		end
 	end
 

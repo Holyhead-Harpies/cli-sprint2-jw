@@ -75,28 +75,36 @@ class ProductModel
   ## @return     message of error or confirmation
   ##
 
-  def remove_product(productId)
+  def find_orders_with_product(productId)
     begin
       @db = open_db_connection
       @db.results_as_hash = true
-      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      truth = @db.execute("SELECT op.OrderId from OrdersProducts op WHERE #{productId} == op.ProductId group by op.OrderId")
       if truth == []
-        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
-        @db.execute statement
-        puts 'Product removed successfully.'
+        remove_product(productId)
       else
-        puts "That product is in an active order"
+        return truth
       end
     rescue SQLite3::Exception => e
-      puts 'Exception occurred from ProductModel.remove_product'
+      puts 'Exception occurred from ProductModel.find_orders_with_product'
       puts e
     ensure
       @db.close
     end
   end
 
+  def remove_product(productId)
+    @db = open_db_connection
+    @db.results_as_hash = true
+    statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+    @db.execute statement
+    puts 'Product removed successfully.'
+  end
+
   def get_product_price_info(product_id)
     begin 
+      @db = open_db_connection
+      @db.results_as_hash = true
       return @db.execute("select p.ProductId, p.Title, p.Price from Products p where p.ProductId = #{product_id}")
     rescue SQLite3::Exception => e
       @db.rollback
@@ -109,6 +117,8 @@ class ProductModel
   end
 
   def get_quantity(product)
+    @db = open_db_connection
+    @db.results_as_hash = true
     quantity = @db.execute("select p.Quantity from Products p where p.ProductId = #{product[0]}")
     return quantity
   end
@@ -116,6 +126,8 @@ class ProductModel
   def reduce_quantity(product)
     old_quantity = get_quantity(product)
     new_quantity = old_quantity[0][0] - product[:number_on_order]
+    @db = open_db_connection  
+    @db.results_as_hash = true  
     @db.execute("update Products set Quantity = #{new_quantity} where ProductId = #{product[0]}")
     @db.close
   end
