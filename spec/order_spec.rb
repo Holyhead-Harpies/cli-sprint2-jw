@@ -134,4 +134,30 @@ describe OrderController do
 		end
 	end
 
+	context ".get_payment_type_id" do
+		it "takes to arguments" do
+			expect(@order_controller).to respond_to(:get_payment_type_id).with(2).arguments
+		end
+
+		it "returns correct value" do
+			option = 1
+			payment_types = [{0 => 1}]
+			expect(@order_controller.get_payment_type_id(option, payment_types)).to eq(1)
+		end
+	end
+
+	context ".get_unique_orders" do
+		it "returns an integer" do
+			@order = OrderModel.new
+			hash = {0 => 1}
+			expect(@order.get_unique_orders(hash)).to be_a(Integer)
+		end
+	end
+
+	context ".get_all_products_on_closed_orders" do
+		it "returns an array" do
+			@order = OrderModel.new
+			expect(@order.get_all_products_on_closed_orders).to be_a(Array)
+		end
+	end
 end
