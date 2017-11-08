@@ -2,13 +2,20 @@ require_relative '../models/product_model'
 require './app/models/order_model.rb'
 require './app/models/customer_model.rb'
 
+
 ##
-## @brief      Class for Product Controller. Initalized with a
-#               new Hash
+## @brief      Controls the data flow from  ProductModel to Menu
 ##
 class ProductController
   attr_accessor :product_hash
 
+  ##
+  ## @brief      initializes Product
+  ##
+  ## @param      product_hash  The product hash
+  ##
+  ## @return
+  ##
   def initialize(product_hash = Hash.new)
     @product_hash = product_hash
   end
@@ -92,7 +99,7 @@ class ProductController
     ProductModel.new.create_new_product(@product_hash)
   end
 
-## @brief      Gets produts from model and prints to the console
+  ## @brief      Gets produts from model and prints to the console
   ##
   ## @param      customerId
   ##
@@ -104,6 +111,7 @@ class ProductController
     products.each_with_index  do |p, i|
       p "#{i+1}. #{p['Title']}"
     end
+    puts products.to_table
     products
   end
 
@@ -213,9 +221,16 @@ class ProductController
       return
     end
 
-    
+
   end
 
+  ##
+  ## @brief      Shows the popular products.
+  ##
+  ## @param      customerId  The customer identifier
+  ##
+  ## @return     calls the method to show top 3 selling products
+  ##
   def show_popular_products(customerId)
 
     closed_orders = OrderModel.new.get_all_products_on_closed_orders
@@ -239,6 +254,13 @@ class ProductController
   end
 
 
+  ##
+  ## @brief      prints top 3 selling products
+  ##
+  ## @param      products  The products
+  ##
+  ## @return     the printed top 3 selling products
+  ##
   def print_products(products)
     total_orders = (products[0][:number_orders] + products[1][:number_orders] + products[2][:number_orders]).to_s.split('')
     total_customers = (products[0][:number_customers] + products[1][:number_customers] + products[2][:number_customers]).to_s.split('')
@@ -261,7 +283,7 @@ class ProductController
         spaces = 20 - name_split.length
         spaces.times { |s| name_split << " "}
         print name_split.join('')
-      end 
+      end
 
       orders_spaces = 11 - orders_split.length
       orders_spaces.times { |o| orders_split << " " }

@@ -2,17 +2,25 @@ require_relative '../models/order_model.rb'
 require_relative '../models/product_model.rb'
 require_relative '../models/payment_types_model.rb'
 
+##
+## @brief      Controls the data flow from OrderModel to Menu
+##
 class OrderController
 
+	##
+	## @brief      initializes ProductModel OrderModel and shopping cart
+	##
+	## @return
+	##
 	def initialize
 		@products_model = ProductModel.new
 		@order_model = OrderModel.new
 		@shopping_cart = Array.new
 	end
 
-	  ## @brief      runs user interactions for adding a product to an open order
-	  ## @param      none
-	  ## @return     none
+	## @brief      runs user interactions for adding a product to an open order
+	## @param      none
+	## @return     none
 	def add_product_to_order(active_customer)
 		@all_products = @products_model.show_all_products
 		@order_id = @order_model.get_current_customer_open_orders(active_customer)
@@ -33,18 +41,18 @@ class OrderController
 		end
 	end
 
-	  ## @brief      displays all products in the database, shows id# and title
-	  ## @param      none
-	  ## @return     none
+	## @brief      displays all products in the database, shows id# and title
+	## @param      none
+	## @return     none
 	def show_products
 		@all_products.each do |item|
 			puts "#{item["ProductId"]} #{item["Title"]}"
 		end
 	end
 
-	  ## @brief      adds a new product to the OrdersProducts table in the database
-	  ## @param      order id (of open order) and id of selected product
-	  ## @return     none
+	## @brief      adds a new product to the OrdersProducts table in the database
+	## @param      order id (of open order) and id of selected product
+	## @return     none
 	def select_product(order_id, product_id)
 		if  product_id.downcase != 'l'
 			p order_id
@@ -64,12 +72,19 @@ class OrderController
 
 
 	## @brief      creates a new order in the Orders table
-	## param		the id of the active customer
+	## param	   the id of the active customer
 	## @return     the id of the order created
 	def create_new_order(customer_id)
 		@order_model.create_new_order(customer_id)
 	end
 
+	##
+	## @brief      completes a customer's order
+	##
+	## @param      customerId  The customer identifier
+	##
+	## @return     to main menu
+	##
 	def complete_current_customer_open_order(customerId)
 		open_order = OrderModel.new.get_current_customer_open_orders(customerId)
         if open_order == []
@@ -79,7 +94,7 @@ class OrderController
 			all_products_on_order = OrderModel.new.get_all_products_from_order(open_order[0][0])
 			p all_products_on_order
 			product_info = Array.new
-			all_products_on_order.each_with_index do |p, i|	
+			all_products_on_order.each_with_index do |p, i|
 				product_info << ProductModel.new.get_product_price_info(p[0])
 				p product_info
 				product_info[i][0][:number_on_order] = all_products_on_order[i][1]
@@ -119,16 +134,36 @@ class OrderController
         end
 	end
 
+	##
+	## @brief      reduces the quantity of a product
+	##
+	## @param      products  The products
+	##
+	## @return
+	##
 	def reduce_products_quantity(products)
 		products.each do |p|
 			ProductModel.new.reduce_quantity(p)
 		end
 	end
 
+	##
+	## @brief      Gets the payment type identifier.
+	##
+	## @param      option         The option
+	## @param      payment_types  The payment types
+	##
+	## @return     The payment type identifier.
+	##
 	def get_payment_type_id(option, payment_types)
 		payment_types[option-1][0]
 	end
 
+	##
+	## @brief      Determines if customer ready to purchase.
+	##
+	## @return     True if customer ready to purchase, False otherwise.
+	##
 	def is_customer_ready_to_purchase?
 		option = STDIN.gets.chomp.downcase
 		case option
@@ -142,6 +177,13 @@ class OrderController
 		end
 	end
 
+	##
+	## @brief      Shows the current customer payment options.
+	##
+	## @param      payment_types  The payment types
+	##
+	## @return     the payment type options for the customer to select
+	##
 	def show_current_customer_payment_options(payment_types)
 
 		payment_types.each_with_index do |p, i|
@@ -150,6 +192,13 @@ class OrderController
 
 	end
 
+	##
+	## @brief      Gets the total price of order.
+	##
+	## @param      products  The products
+	##
+	## @return     The total price of order.
+	##
 	def get_total_price_of_order(products)
 		p products
 		sum = 0

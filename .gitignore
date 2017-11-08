@@ -3,4 +3,4 @@ db/sprint2.sqlite
 .idea
 db/test.sqlite
 .rspec
-
+spec/revenue*
