@@ -6,7 +6,7 @@ require 'sqlite3'
 ##
 class ProductModel
 
-  def initialize(database = '../db/sprint2.sqlite')
+  def initialize(database = './db/sprint2.sqlite')
     @database = database
   end
 

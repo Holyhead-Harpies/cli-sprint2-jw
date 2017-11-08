@@ -3,7 +3,7 @@ require 'date'
 
 class OrderModel
 
-	def initialize(database = '../db/sprint2.sqlite')
+	def initialize(database = './db/sprint2.sqlite')
 		@database = database
 	end
 

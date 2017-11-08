@@ -8,7 +8,7 @@ class CustomerModel
 ## @brief      initializes the database for the model to write to
 ## @param      directory path to the database, default is sprint2.db
 ## @return     no value returned
-	def initialize(database = '../db/sprint2.sqlite')
+	def initialize(database = './db/sprint2.sqlite')
 		@db = SQLite3::Database.new(database)
 		@db.results_as_hash = true
 	end
