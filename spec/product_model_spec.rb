@@ -69,4 +69,12 @@ describe ProductModel do
       expect{@product_model.remove_product}.to raise_error(ArgumentError)
     end
   end
+
+  context '.get_quantity' do
+    it 'should take a hash' do
+      hash = {0 => 1}
+      @product = ProductModel.new
+      expect(@product.get_quantity(hash)).to be_a(Array)
+    end
+  end
 end
