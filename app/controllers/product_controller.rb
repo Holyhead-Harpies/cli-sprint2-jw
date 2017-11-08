@@ -1,3 +1,4 @@
+require 'text-table'
 require_relative '../models/product_model'
 
 ##
@@ -9,6 +10,8 @@ class ProductController
 
   def initialize(product_hash = Hash.new)
     @product_hash = product_hash
+    @table = Text::Table.new
+
   end
 
   ## @brief      Adds customer_id to product_hash
@@ -102,6 +105,7 @@ class ProductController
     products.each_with_index  do |p, i|
       p "#{i+1}. #{p['Title']}"
     end
+    puts products.to_table
     products
   end
 
