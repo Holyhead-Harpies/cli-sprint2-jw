@@ -29,10 +29,8 @@ class MainMenuController
         puts "6. Complete an order"
         puts "7. Remove customer product"
         puts "8. Update product information"
-        puts "9. Show stale products"
-        puts "10. Show customer revenue report"
-        puts "11. Show overall product popularity"
-        puts "12. Leave Bangazon!"
+        puts "9. Show overall product popularity"
+        puts "10. Leave Bangazon!"
         puts "> "
 
         option = get_user_input
@@ -63,6 +61,14 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '5'
+            if @active_customer
+                OrderController.new.add_product_to_order(@active_customer)
+                display_main_menu(message)
+            else
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
+
         when '6'
             if @active_customer
                 OrderController.new.complete_current_customer_open_order(@active_customer)
@@ -91,9 +97,8 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '9'
+                ProductController.new.show_popular_products(@active_customer)
         when '10'
-        when '11'
-        when '12'
             system "clear"
             return
         else

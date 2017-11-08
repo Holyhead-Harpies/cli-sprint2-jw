@@ -1,6 +1,6 @@
 require 'sqlite3'
 
-db = SQLite3::Database.new('./db/sprint2.sqlite')
+db = SQLite3::Database.new('./db/test.sqlite')
 begin
     db.transaction
     db.execute("CREATE TABLE `Customers` (
@@ -27,7 +27,7 @@ begin
     );")
     db.execute("CREATE TABLE `PaymentTypes` (
     `PaymentTypeId`    INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    `CustomerId`    INTEGER NOT NULL, 
+    `CustomerId`    INTEGER NOT NULL,
     `Card_Name`    TEXT NOT NULL,
     `Card_Number`    TEXT NOT NULL,
     `created_at`    datetime NOT NULL,
@@ -55,8 +55,8 @@ begin
     foreign key (OrderId) references Orders (OrderId),
     foreign key (ProductId) references Products (ProductId)
     );")
-    db.commit 
-    db.close 
+    db.commit
+    db.close
 rescue SQLite3::Exception => e
     p e.message
     db.rollback

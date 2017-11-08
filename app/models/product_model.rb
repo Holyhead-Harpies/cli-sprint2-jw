@@ -4,20 +4,23 @@ require 'sqlite3'
 ##
 ## @brief      Class for Product model.
 ##
-class Product
+class ProductModel
 
-  def initialize
-    @db = SQLite3::Database.open('./db/sprint2.sqlite')
-    @db.results_as_hash = true
+  def initialize(database = './db/sprint2.sqlite')
+    @database = database
   end
 
+  ## @brief      opens a connection to the database specified when class is initialized
+  ## @param      none
+  ## @return     returns connection to database
+
+  def open_db_connection
+    SQLite3::Database.open(@database)
+  end
 
   ## @brief      creates a new product from the controller hash and passes it to the database
-  ##
   ## @param      hash_from_controller
-  ##
   ## @return     returns nothing
-  ##
 
   def create_new_product(hash_from_controller)
     d = DateTime.now
@@ -29,6 +32,8 @@ class Product
                   '#{hash_from_controller[:title]}', '#{hash_from_controller[:description]}',
                   '#{hash_from_controller[:price]}', '#{hash_from_controller[:quantity]}',
                   '#{hash_from_controller[:created_at]}', '#{hash_from_controller[:updated_at]}')"
+      @db = open_db_connection
+      @db.results_as_hash = true
       @db.transaction
       @db.execute statement
       @db.commit
@@ -51,6 +56,8 @@ class Product
   def get_products(customerId)
     begin
       products = "SELECT Products.title, Products.ProductId from Products where Products.OwnerId == #{customerId.to_i}"
+      @db = open_db_connection
+      @db.results_as_hash = true
       @db.execute products
     rescue SQLite3::Exception => e
       puts 'Exception occurred from ProductModel.show_products'
@@ -68,26 +75,36 @@ class Product
   ## @return     message of error or confirmation
   ##
 
-  def remove_product(productId)
+  def find_orders_with_product(productId)
     begin
-      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      @db = open_db_connection
+      @db.results_as_hash = true
+      truth = @db.execute("SELECT op.OrderId from OrdersProducts op WHERE #{productId} == op.ProductId group by op.OrderId")
       if truth == []
-        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
-        @db.execute statement
-        puts 'Product removed successfully.'
+        remove_product(productId)
       else
-        puts "That product is in an active order"
+        return truth
       end
     rescue SQLite3::Exception => e
-      puts 'Exception occurred from ProductModel.remove_product'
+      puts 'Exception occurred from ProductModel.find_orders_with_product'
       puts e
     ensure
       @db.close
     end
   end
 
+  def remove_product(productId)
+    @db = open_db_connection
+    @db.results_as_hash = true
+    statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+    @db.execute statement
+    puts 'Product removed successfully.'
+  end
+
   def get_product_price_info(product_id)
     begin 
+      @db = open_db_connection
+      @db.results_as_hash = true
       return @db.execute("select p.ProductId, p.Title, p.Price from Products p where p.ProductId = #{product_id}")
     rescue SQLite3::Exception => e
       @db.rollback
@@ -100,6 +117,8 @@ class Product
   end
 
   def get_quantity(product)
+    @db = open_db_connection
+    @db.results_as_hash = true
     quantity = @db.execute("select p.Quantity from Products p where p.ProductId = #{product[0]}")
     return quantity
   end
@@ -107,6 +126,8 @@ class Product
   def reduce_quantity(product)
     old_quantity = get_quantity(product)
     new_quantity = old_quantity[0][0] - product[:number_on_order]
+    @db = open_db_connection  
+    @db.results_as_hash = true  
     @db.execute("update Products set Quantity = #{new_quantity} where ProductId = #{product[0]}")
     @db.close
   end
@@ -122,6 +143,8 @@ class Product
   def get_product(customerId,productId)
     begin
       products = "SELECT Products.title, Products.description, Products.price, Products.quantity from Products where Products.OwnerId = #{customerId} and Products.ProductId = #{productId}"
+      @db = open_db_connection
+      @db.results_as_hash = true
       @db.transaction
       @db.execute products
     rescue SQLite3::Exception => e
@@ -146,7 +169,9 @@ class Product
   ##
   def update_product(customerId,productId,field_change,value_change)
     begin
-      statement = "UPDATE Products SET #{field_change} = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"
+      @db = open_db_connection
+      @db.results_as_hash = true
+      statement = "UPDATE Products SET '#{field_change}' = '#{value_change}' WHERE productID = #{productId} and OwnerId = #{customerId};"
       @db.transaction
       @db.execute statement
       @db.commit
@@ -157,4 +182,36 @@ class Product
       @db.close
     end
   end
+
+  ## @brief      queries database for all Products data in the Products table
+  ## @param      none
+  ## @return     returns all values for Products
+
+  def show_all_products
+    @db = open_db_connection
+    @db.results_as_hash = true
+    @db.results_as_hash
+    @db.transaction
+    products = @db.execute "SELECT ProductId, OwnerId, Title, Description, Price, Quantity FROM Products"
+    @db.commit
+    @db.close
+    products
+  end
+
+  ## @brief      queries database for one product
+  ## @param      product id
+  ## @return     returns specified row from Products
+
+  def show_one_product(product_id)
+    @db = open_db_connection
+    @db.results_as_hash = true
+    @db.results_as_hash
+    statement = "SELECT ProductId, Title FROM Products WHERE ProductID = #{product_id}"
+    @db.transaction
+    product = @db.execute statement
+    @db.close
+    product
+  end
+
 end
+

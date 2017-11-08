@@ -1,19 +1,73 @@
-require './app/models/order_model.rb'
-require './app/models/product_model.rb'
-require './app/models/payment_types_model.rb'
+require_relative '../models/order_model.rb'
+require_relative '../models/product_model.rb'
+require_relative '../models/payment_types_model.rb'
 
 class OrderController
 
-	def initiallize
-
+	def initialize
+		@products_model = ProductModel.new
+		@order_model = OrderModel.new
+		@shopping_cart = Array.new
 	end
 
-	def addproduct(product)
+	  ## @brief      runs user interactions for adding a product to an open order
+	  ## @param      none
+	  ## @return     none
+	def add_product_to_order(active_customer)
+		@all_products = @products_model.show_all_products
+		@order_id = @order_model.get_current_customer_open_orders(active_customer)
+		if @order_id == []
+			@order_id = create_new_order(active_customer)
+		end
 
+		loop do
+			puts "Please select a product to add to the order:"
+			show_products
+
+			puts "Enter the ID number of the product you want to add, or type 'L' to leave."
+			selection = STDIN.gets.chomp
+
+			select_product(@order_id, selection)
+
+			break if selection.downcase == 'l'
+		end
 	end
 
-	def showproducts
+	  ## @brief      displays all products in the database, shows id# and title
+	  ## @param      none
+	  ## @return     none
+	def show_products
+		@all_products.each do |item|
+			puts "#{item["ProductId"]} #{item["Title"]}"
+		end
+	end
 
+	  ## @brief      adds a new product to the OrdersProducts table in the database
+	  ## @param      order id (of open order) and id of selected product
+	  ## @return     none
+	def select_product(order_id, product_id)
+		if  product_id.downcase != 'l'
+			p order_id
+			p product_id
+			@order_model.add_product_to_order(order_id[0][0], product_id.to_i)
+			selected_product =  @products_model.show_one_product(product_id)
+			@shopping_cart.push(selected_product[0])
+
+			puts "Your shopping cart contains:"
+			puts '*******************************************'
+			@shopping_cart.each do |item|
+				puts "#{item['ProductId']} #{item['Title']}"
+			end
+			puts '*******************************************'
+		end
+	end
+
+
+	## @brief      creates a new order in the Orders table
+	## param		the id of the active customer
+	## @return     the id of the order created
+	def create_new_order(customer_id)
+		@order_model.create_new_order(customer_id)
 	end
 
 	def complete_current_customer_open_order(customerId)
@@ -23,16 +77,18 @@ class OrderController
             STDIN.gets.chomp
 		else
 			all_products_on_order = OrderModel.new.get_all_products_from_order(open_order[0][0])
+			p all_products_on_order
 			product_info = Array.new
 			all_products_on_order.each_with_index do |p, i|	
-				product_info << Product.new.get_product_price_info(p[0])
+				product_info << ProductModel.new.get_product_price_info(p[0])
+				p product_info
 				product_info[i][0][:number_on_order] = all_products_on_order[i][1]
 			end
 			product_info = product_info.flatten
 			quantities_available = Array.new
 			wanted_quantities = Array.new
 			product_info.each do |p|
-				quantity_available = Product.new.get_quantity(p)
+				quantity_available = ProductModel.new.get_quantity(p)
 				quantities_available << quantity_available[0][0]
 				wanted_quantities << p[:number_on_order]
 			end
@@ -50,22 +106,22 @@ class OrderController
 				if is_customer_ready_to_purchase?
 					payment_types_current_customer = PaymentTypeModel.new.get_current_customer_payment_types(customerId)
 					show_current_customer_payment_options(payment_types_current_customer)
+					puts "Select a payment option."
 					option = STDIN.gets.chomp.to_i
 					payment_type_id = get_payment_type_id(option, payment_types_current_customer)
 					OrderModel.new.add_payment_type_to_open_order(open_order[0][0], payment_type_id)
 					OrderModel.new.set_order_status_completed_to_true(open_order[0][0])
 					reduce_products_quantity(product_info)
-				else 
+				else
 					return
 				end
 			end
-			
         end
 	end
 
 	def reduce_products_quantity(products)
 		products.each do |p|
-			Product.new.reduce_quantity(p)
+			ProductModel.new.reduce_quantity(p)
 		end
 	end
 
