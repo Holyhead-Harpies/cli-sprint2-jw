@@ -60,15 +60,21 @@ class OrderModel
 		end
 	end
 
+
+	## @brief gets all of the orders for a customer which have not been completed yet.
+	## @params an integer for the customer ID
+	## @returns an array of hashes containg order information
 	def get_current_customer_open_orders(customerId)
 		@db = open_db_connection
 		@db.results_as_hash = true				
 		order = @db.execute("select o.* from Orders o where o.CustomerId = '#{customerId}' and o.Completed = '0'")
 		@db.close
-		puts "get_current_customer_open_orders output is #{order} "
 		return order
 	end
 
+	## @brief gets all the products on a specific order and adds an extra field for specific quantity for each product on that order
+	## @params orderId as an integer
+	## @returns an array of all products with each product having its own hash
 	def get_all_products_from_order(orderId)
 		@db = open_db_connection
 		@db.results_as_hash = true		
@@ -77,6 +83,10 @@ class OrderModel
 		return products_on_order
 	end
 
+
+	## @brief updates the orders table with a payment type id
+	## @params orderId as integer and paymenttypeId as an integer
+	## @returns
 	def add_payment_type_to_open_order(order_id, payment_type_id)
 		@db = open_db_connection
 		@db.results_as_hash = true						
@@ -84,6 +94,9 @@ class OrderModel
 		@db.close
 	end
 
+	## @brief updates the orders table with completed status of '1'
+	## @params orderId as integer
+	## @returns
 	def set_order_status_completed_to_true(order_id)
 		@db = open_db_connection
 		@db.results_as_hash = true						
@@ -91,6 +104,9 @@ class OrderModel
 		@db.close
 	end
 
+	## @brief gets all products on orders with a Completed field value of '1'
+	## @params 
+	## @returns all products on closed orders
 	def get_all_products_on_closed_orders
 		@db = open_db_connection
 		@db.results_as_hash = true								
@@ -99,6 +115,9 @@ class OrderModel
 		return closed_orders
 	end
 
+	## @brief number of orders the product passed is on
+	## @params takes a hash of product information
+	## @returns an integers denoting the number of closed orders the product is on
 	def get_unique_orders(product)
 		@db = open_db_connection
 		@db.results_as_hash = true								
@@ -107,6 +126,9 @@ class OrderModel
 		return order_query[0][1]
 	end
 
+	## @brief checks to see if the passed order is open
+	## @params takes an integer of the orderID
+	## @reutrns true if there is an open order or false if there is not an open order
 	def check_for_open_order(order)
 		p order
 		@db = open_db_connection

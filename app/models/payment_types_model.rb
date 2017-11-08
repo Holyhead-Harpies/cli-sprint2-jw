@@ -26,6 +26,9 @@ class PaymentTypeModel
         @db.close
     end
 
+    ## @brief gets the payment types for the customer when trying to complete an open order
+    ## @params takes the customerID as an integer
+    ## @returns an array of hashes of the payment types for the current customer
     def get_current_customer_payment_types(current_id)
         payment_types = @db.execute("select pt.* from PaymentTypes pt where CustomerId = #{current_id}")
         @db.close
