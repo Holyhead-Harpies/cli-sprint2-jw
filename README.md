@@ -1,6 +1,8 @@
 # Bangazon API (Sprint #2)
 This is the CLI for interacting with the Bangazon database. The database includes tables for data about customers, products, orders, and payment types.  
 
+<p align="center">
+  <img src="https://giphy.com/gifs/26FfeuuRkFZAf1J0A/html5"/></p>
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
@@ -45,6 +47,7 @@ The CLI has the following functionality for the USER:
  can delete a Product from that list. 
  8. **Update an Order**  -  On an active Customer the User selects to update a Product.  The User is given a list of all the 
  Customer's products and when selected is given the option in a submenu to update Title, Description, Price, Quantity.
+ 9. **Product Popularity** - The User can see the three most popular products in the system. 
 
 
 ## Contributors
