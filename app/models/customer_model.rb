@@ -12,9 +12,9 @@ class CustomerModel
 		@db = SQLite3::Database.new(database)
 		@db.results_as_hash = true
 	end
-## @brief      adds customer data to the database, customer table
-## @param      customer hash
-## @return     returns row id when customer is successfully added
+	## @brief      adds customer data to the database, customer table
+	## @param      customer hash
+	## @return     returns row id when customer is successfully added
 	def add_customer(customer_hash)
 		begin
 			statement = "INSERT INTO Customers(Name, Street_Address, City, State, ZIP, Phone, created_at, updated_at) VALUES('#{customer_hash[:customer_name]}', '#{customer_hash[:address]}', '#{customer_hash[:city]}', '#{customer_hash[:state]}', '#{customer_hash[:zip]}', '#{customer_hash[:phone]}', '#{customer_hash[:created_at]}', '#{customer_hash[:updated_at]}')"
@@ -32,10 +32,16 @@ class CustomerModel
 		end
 	end
 
+	## @brief Creates a sql statement for getting all customer information
+	## @params 
+	## @returns the created sql statement
 	def get_all_customers
 		stm = @db.execute "select * from Customers"
 	end
 
+	## @brief A sql query that returns the number of different customers that bought a certain product.
+	## @params Product information including the product ID which is used in the sql query string
+	## @returns an integer denoting the number of unique customers
 	def get_unique_customers(product)
 		queried_product = @db.execute("select p.ProductId, count(distinct c.CustomerId) 'Num Orders' from Orders o, Products p, OrdersProducts op, Customers c where o.Completed = '1' and o.OrderId = op.OrderId and op.ProductId = p.ProductId and o.CustomerId = c.CustomerId and p.ProductId = #{product[0]} group by op.ProductId")
 		@db.close

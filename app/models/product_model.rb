@@ -68,11 +68,11 @@ class ProductModel
     end
   end
 
-  ## @brief      removes product based on item not being in the cart/order
+  ## @brief      finds all orders from the OrdersProducts table by productID
   ##
-  ## @param      productId
+  ## @param      productId as an integer
   ##
-  ## @return     message of error or confirmation
+  ## @return     orderIds for all orders the product is on or calls a method to remove the product from the Products table if it has never been ordered.
   ##
 
   def find_orders_with_product(productId)
@@ -93,6 +93,10 @@ class ProductModel
     end
   end
 
+
+  ## @brief removes a product from the products table
+  ## @params takes productId as an integer
+  ## @returns text output denoting the product was successfully removed
   def remove_product(productId)
     @db = open_db_connection
     @db.results_as_hash = true
@@ -101,6 +105,9 @@ class ProductModel
     puts 'Product removed successfully.'
   end
 
+  ## @brief gets product information based on product id
+  ## @params product_id as an integer
+  ## @returns product information for the desired product
   def get_product_price_info(product_id)
     begin 
       @db = open_db_connection
@@ -116,6 +123,9 @@ class ProductModel
     end
   end
 
+  ## @brief gets the current available quantity for the product desired. Called in the reduce_quantity method
+  ## @params hash of product information
+  ## @returns quantity as an integer
   def get_quantity(product)
     @db = open_db_connection
     @db.results_as_hash = true
@@ -123,6 +133,9 @@ class ProductModel
     return quantity
   end
 
+  ## @brief updates the quantity available by reducing the quantity by the amount ordered on the order being closed
+  ## @params takes a hash of product information
+  ## @returns 
   def reduce_quantity(product)
     old_quantity = get_quantity(product)
     new_quantity = old_quantity[0][0] - product[:number_on_order]
