@@ -1,8 +1,6 @@
 # Bangazon API (Sprint #2)
 This is the CLI for interacting with the Bangazon database. The database includes tables for data about customers, products, orders, and payment types.  
 
-<p align="center">
-  <img src="https://giphy.com/gifs/26FfeuuRkFZAf1J0A/html5"/></p>
 ## Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
