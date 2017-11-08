@@ -1,19 +1,71 @@
-require './app/models/order_model.rb'
-require './app/models/product_model.rb'
-require './app/models/payment_types_model.rb'
+require_relative '../models/order_model.rb'
+require_relative '../models/product_model.rb'
+require_relative '../models/payment_types_model.rb'
 
 class OrderController
 
-	def initiallize
-
+	def initialize
+		@products_model = ProductModel.new
+		@order_model = OrderModel.new
+		@shopping_cart = Array.new
 	end
 
-	def addproduct(product)
+	  ## @brief      runs user interactions for adding a product to an open order
+	  ## @param      none
+	  ## @return     none
+	def add_product_to_order(active_customer)
+		@all_products = @products_model.show_all_products
+		@order_id = @order_model.get_current_customer_open_orders(active_customer)
+		if @order_id = []
+			@order_id = create_new_order(active_customer)
+		end
 
+		loop do
+			puts "Please select a product to add to the order:"
+			show_products
+
+			puts "Enter the ID number of the product you want to add, or type 'L' to leave."
+			selection = STDIN.gets.chomp
+
+			select_product(@order_id, selection)
+
+			break if selection.downcase == 'l'
+		end
 	end
 
-	def showproducts
+	  ## @brief      displays all products in the database, shows id# and title
+	  ## @param      none
+	  ## @return     none
+	def show_products
+		@all_products.each do |item|
+			puts "#{item["ProductId"]} #{item["Title"]}"
+		end
+	end
 
+	  ## @brief      adds a new product to the OrdersProducts table in the database
+	  ## @param      order id (of open order) and id of selected product
+	  ## @return     none
+	def select_product(order_id, product_id)
+		if  product_id.downcase != 'l'
+			@order_model.add_product_to_order(order_id, product_id)
+			selected_product =  @products_model.show_one_product(product_id)
+			@shopping_cart.push(selected_product[0])
+
+			puts "Your shopping cart contains:"
+			puts '*******************************************'
+			@shopping_cart.each do |item|
+				puts "#{item['ProductId']} #{item['Title']}"
+			end
+			puts '*******************************************'
+		end
+	end
+
+
+	## @brief      creates a new order in the Orders table
+	## param		the id of the active customer
+	## @return     the id of the order created
+	def create_new_order(customer_id)
+		@order_model.create_new_order(customer_id)
 	end
 
 	def complete_current_customer_open_order(customerId)
@@ -56,11 +108,10 @@ class OrderController
 					OrderModel.new.add_payment_type_to_open_order(open_order[0][0], payment_type_id)
 					OrderModel.new.set_order_status_completed_to_true(open_order[0][0])
 					reduce_products_quantity(product_info)
-				else 
+				else
 					return
 				end
 			end
-			
         end
 	end
 
