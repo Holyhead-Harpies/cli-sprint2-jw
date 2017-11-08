@@ -75,16 +75,18 @@ class OrderController
             STDIN.gets.chomp
 		else
 			all_products_on_order = OrderModel.new.get_all_products_from_order(open_order[0][0])
+			p all_products_on_order
 			product_info = Array.new
 			all_products_on_order.each_with_index do |p, i|	
-				product_info << Product.new.get_product_price_info(p[0])
+				product_info << ProductModel.new.get_product_price_info(p[0])
+				p product_info
 				product_info[i][0][:number_on_order] = all_products_on_order[i][1]
 			end
 			product_info = product_info.flatten
 			quantities_available = Array.new
 			wanted_quantities = Array.new
 			product_info.each do |p|
-				quantity_available = Product.new.get_quantity(p)
+				quantity_available = ProductModel.new.get_quantity(p)
 				quantities_available << quantity_available[0][0]
 				wanted_quantities << p[:number_on_order]
 			end
@@ -116,7 +118,7 @@ class OrderController
 
 	def reduce_products_quantity(products)
 		products.each do |p|
-			Product.new.reduce_quantity(p)
+			ProductModel.new.reduce_quantity(p)
 		end
 	end
 

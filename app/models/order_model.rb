@@ -69,17 +69,21 @@ class OrderModel
 	end
 
 	def get_all_products_from_order(orderId)
+		@db = open_db_connection
+		@db.results_as_hash = true		
 		products_on_order = @db.execute("select op.ProductId, count(*) 'NumberProducts' from OrdersProducts op where op.OrderId = #{orderId} group by op.ProductId")
 		@db.close
 		return products_on_order
 	end
 
 	def add_payment_type_to_open_order(order_id, payment_type_id)
+		@db = open_db_connection		
 		@db.execute("update Orders set PaymentTypeId = #{payment_type_id} where OrderId = #{order_id}")
 		@db.close
 	end
 
 	def set_order_status_completed_to_true(order_id)
+		@db = open_db_connection		
 		@db.execute("update Orders set Completed = 1 where OrderId = #{order_id}")
 		@db.close
 	end
