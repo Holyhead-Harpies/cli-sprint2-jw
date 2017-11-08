@@ -29,10 +29,8 @@ class MainMenuController
         puts "6. Complete an order"
         puts "7. Remove customer product"
         puts "8. Update product information"
-        puts "9. Show stale products"
-        puts "10. Show customer revenue report"
-        puts "11. Show overall product popularity"
-        puts "12. Leave Bangazon!"
+        puts "9. Show overall product popularity"
+        puts "10. Leave Bangazon!"
         puts "> "
 
         option = get_user_input
@@ -99,10 +97,8 @@ class MainMenuController
                 display_main_menu(message)
             end
         when '9'
-        when '10'
-        when '11'
                 ProductController.new.show_popular_products(@active_customer)
-        when '12'
+        when '10'
             system "clear"
             return
         else

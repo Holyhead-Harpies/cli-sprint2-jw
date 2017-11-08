@@ -75,24 +75,30 @@ class ProductModel
   ## @return     message of error or confirmation
   ##
 
-  def remove_product(productId)
+  def find_orders_with_product(productId)
     begin
       @db = open_db_connection
       @db.results_as_hash = true
-      truth = @db.execute("SELECT * from OrdersProducts WHERE #{productId} == OrdersProducts.ProductId")
+      truth = @db.execute("SELECT op.OrderId from OrdersProducts op WHERE #{productId} == op.ProductId group by op.OrderId")
       if truth == []
-        statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
-        @db.execute statement
-        puts 'Product removed successfully.'
+        remove_product(productId)
       else
-        puts "That product is in an active order"
+        return truth
       end
     rescue SQLite3::Exception => e
-      puts 'Exception occurred from ProductModel.remove_product'
+      puts 'Exception occurred from ProductModel.find_orders_with_product'
       puts e
     ensure
       @db.close
     end
+  end
+
+  def remove_product(productId)
+    @db = open_db_connection
+    @db.results_as_hash = true
+    statement = "DELETE FROM Products WHERE Products.ProductId == #{productId}"
+    @db.execute statement
+    puts 'Product removed successfully.'
   end
 
   def get_product_price_info(product_id)

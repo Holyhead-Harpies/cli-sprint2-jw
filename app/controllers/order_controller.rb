@@ -16,7 +16,7 @@ class OrderController
 	def add_product_to_order(active_customer)
 		@all_products = @products_model.show_all_products
 		@order_id = @order_model.get_current_customer_open_orders(active_customer)
-		if @order_id = []
+		if @order_id == []
 			@order_id = create_new_order(active_customer)
 		end
 
@@ -47,7 +47,9 @@ class OrderController
 	  ## @return     none
 	def select_product(order_id, product_id)
 		if  product_id.downcase != 'l'
-			@order_model.add_product_to_order(order_id, product_id)
+			p order_id
+			p product_id
+			@order_model.add_product_to_order(order_id[0][0], product_id.to_i)
 			selected_product =  @products_model.show_one_product(product_id)
 			@shopping_cart.push(selected_product[0])
 
