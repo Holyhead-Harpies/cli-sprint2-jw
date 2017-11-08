@@ -1,4 +1,6 @@
 require_relative '../models/product_model'
+require './app/models/order_model.rb'
+require './app/models/customer_model.rb'
 
 ##
 ## @brief      Class for Product Controller. Initalized with a
@@ -197,7 +199,86 @@ class ProductController
       return
     end
 
+    
+  end
+
+  def show_popular_products(customerId)
+
+    closed_orders = OrderModel.new.get_all_products_on_closed_orders
+    products_with_total_revenue = Array.new
+    closed_orders.each do |o|
+      o[:total_revenue] = o[2] * o[3]
+      products_with_total_revenue << o
+    end
+
+    products_with_total_revenue.sort!{ |a,b| b[:total_revenue]<=> a[:total_revenue]}
+
+    top_three_sellers = products_with_total_revenue.slice(0, 3)
+
+    top_three_sellers.each_with_index do |p, i|
+      top_three_sellers[i][:number_orders] = OrderModel.new.get_unique_orders(p)
+      top_three_sellers[i][:number_customers] = CustomerModel.new.get_unique_customers(p)
+    end
+
+    print_products(top_three_sellers)
+
+  end
 
 
+  def print_products(products)
+    total_orders = (products[0][:number_orders] + products[1][:number_orders] + products[2][:number_orders]).to_s.split('')
+    total_customers = (products[0][:number_customers] + products[1][:number_customers] + products[2][:number_customers]).to_s.split('')
+    total_revenue = (products[0][:total_revenue] + products[1][:total_revenue] + products[2][:total_revenue]).round(2).to_s.split('')
+
+    puts "Product             Orders     Purchasers     Revenue        "
+    puts "*************************************************************"
+
+    products.each do |p|
+      name_split = p[1].split('')
+      orders_split = p[:number_orders].to_s.split('')
+      customers_split = p[:number_customers].to_s.split('')
+      revenue_split = p[:total_revenue].to_s.split('')
+
+      if name_split.length > 18
+        new_name = name_split.slice(0,18)
+        2.times {|l| new_name << "."}
+        print new_name.join('')
+      else
+        spaces = 20 - name_split.length
+        spaces.times { |s| name_split << " "}
+        print name_split.join('')
+      end 
+
+      orders_spaces = 11 - orders_split.length
+      orders_spaces.times { |o| orders_split << " " }
+      print orders_split.join('')
+
+      customers_spaces = 15 - customers_split.length
+      customers_spaces.times { |o| customers_split << " " }
+      print customers_split.join('')
+
+      print "$"
+      revenue_spaces = 14 - revenue_split.length
+      revenue_spaces.times { |o| revenue_split << " " }
+      print revenue_split.join('')
+
+      puts
+    end
+
+    puts "*************************************************************"
+    print "Totals:             "
+
+    total_orders_spaces = 11 -total_orders.length
+    total_customers_spaces = 15 -total_customers.length
+    total_revenue_spaces = 14 - total_revenue.length
+
+    total_orders_spaces.times { |o| total_orders << " "}
+    print total_orders.join('')
+
+    total_customers_spaces.times { |o| total_customers << " "}
+    print total_customers.join('')
+    print "$"
+    total_revenue_spaces.times { |o| total_revenue << " "}
+    print total_revenue.join('')
   end
 end

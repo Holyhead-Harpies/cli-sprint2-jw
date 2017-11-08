@@ -208,3 +208,4 @@ class ProductModel
   end
 
 end
+
