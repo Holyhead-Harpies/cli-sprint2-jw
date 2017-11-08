@@ -102,6 +102,7 @@ class OrderController
 				if is_customer_ready_to_purchase?
 					payment_types_current_customer = PaymentTypeModel.new.get_current_customer_payment_types(customerId)
 					show_current_customer_payment_options(payment_types_current_customer)
+					puts "Select a payment option."
 					option = STDIN.gets.chomp.to_i
 					payment_type_id = get_payment_type_id(option, payment_types_current_customer)
 					OrderModel.new.add_payment_type_to_open_order(open_order[0][0], payment_type_id)

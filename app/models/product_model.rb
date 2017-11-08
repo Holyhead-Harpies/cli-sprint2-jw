@@ -202,3 +202,4 @@ class ProductModel
   end
 
 end
+

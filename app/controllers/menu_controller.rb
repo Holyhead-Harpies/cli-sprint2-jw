@@ -101,6 +101,7 @@ class MainMenuController
         when '9'
         when '10'
         when '11'
+                ProductController.new.show_popular_products(@active_customer)
         when '12'
             system "clear"
             return
