@@ -16,6 +16,12 @@ class OrderModel
 		return order
 	end
 
+	def get_current_customer_closed_orders(customerId)
+		order = @db.execute("select o.* from Orders o where o.CustomerId = '#{customerId}' and o.Completed = '1'")
+		@db.close
+		return order
+	end
+
 	def get_all_products_from_order(orderId)
 		products_on_order = @db.execute("select op.ProductId, count(*) 'NumberProducts' from OrdersProducts op where op.OrderId = #{orderId} group by op.ProductId")
 		@db.close
@@ -31,4 +37,5 @@ class OrderModel
 		@db.execute("update Orders set Completed = 1 where OrderId = #{order_id}")
 		@db.close
 	end
+
 end

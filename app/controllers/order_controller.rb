@@ -1,7 +1,7 @@
 require './app/models/order_model.rb'
 require './app/models/product_model.rb'
 require './app/models/payment_types_model.rb'
-
+require 'terminal-table'
 class OrderController
 
 	def initiallize
@@ -18,13 +18,13 @@ class OrderController
 
 	def complete_current_customer_open_order(customerId)
 		open_order = OrderModel.new.get_current_customer_open_orders(customerId)
-        if open_order == []
-            puts "Please add some products to your order first. Press any key to return to main menu."
-            STDIN.gets.chomp
+		if open_order == []
+			puts "Please add some products to your order first. Press any key to return to main menu."
+			STDIN.gets.chomp
 		else
 			all_products_on_order = OrderModel.new.get_all_products_from_order(open_order[0][0])
 			product_info = Array.new
-			all_products_on_order.each_with_index do |p, i|	
+			all_products_on_order.each_with_index do |p, i|
 				product_info << Product.new.get_product_price_info(p[0])
 				product_info[i][0][:number_on_order] = all_products_on_order[i][1]
 			end
@@ -55,12 +55,12 @@ class OrderController
 					OrderModel.new.add_payment_type_to_open_order(open_order[0][0], payment_type_id)
 					OrderModel.new.set_order_status_completed_to_true(open_order[0][0])
 					reduce_products_quantity(product_info)
-				else 
+				else
 					return
 				end
 			end
-			
-        end
+
+		end
 	end
 
 	def reduce_products_quantity(products)
@@ -103,5 +103,45 @@ class OrderController
 		sum
 	end
 
+	def show_revenue(customerId)
+		closed_orders = OrderModel.new.get_current_customer_closed_orders(customerId)
+		closed_orders_ids = []
 
+		closed_orders.each_with_index do |order|
+			closed_orders_ids << order['OrderId']
+		end
+
+		products = Hash.new
+		ids = []
+		closed_orders_ids.each_with_index do |orderid|
+			ids << orderid
+			products[orderid] = OrderModel.new.get_all_products_from_order(orderid)
+		end
+
+		totalcost = 0
+		table = Terminal::Table.new do |t|
+			ids.each_with_index do |a,i|
+				t << ["Order# #{a}", 'Quantity','Cost']
+				t.add_separator
+				products[a].each_with_index do |b,j|
+					id = b['ProductId']
+					name = Product.new.get_product_price_info(id)[0]['Title']
+					price = Product.new.get_product_price_info(id)[0]['Price']
+					totalcost += b['NumberProducts']*price
+					t.add_row ["#{name}", "#{b['NumberProducts']}", "$#{b['NumberProducts']*price}"]
+					products[a].length
+					j
+					if j == products[a].length-1 && i == ids.length - 1
+					elsif j < products[a].length-1
+					else
+						t << :separator
+
+					end
+				end
+
+			end
+		end
+		puts table
+		puts "Total Cost: $#{totalcost}"
+	end
 end

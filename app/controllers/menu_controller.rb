@@ -68,7 +68,7 @@ class MainMenuController
                 OrderController.new.complete_current_customer_open_order(@active_customer)
                 message = "Order Successfully completed."
                 display_main_menu(message)
-            else 
+            else
                 message = "Must set an active customer."
                 display_main_menu(message)
             end
@@ -92,6 +92,14 @@ class MainMenuController
             end
         when '9'
         when '10'
+            if @active_customer
+                OrderController.new.show_revenue(@active_customer)
+                message = "Product edited successfully."
+                display_main_menu(message)
+            else
+                message = "Must set an active customer."
+                display_main_menu(message)
+            end
         when '11'
         when '12'
             system "clear"
